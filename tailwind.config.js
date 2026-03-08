@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -56,6 +57,7 @@ export default {
         'bottom-nav': '0 -1px 8px rgba(0,0,0,0.08)',
         'sheet': '0 -4px 24px rgba(0,0,0,0.12)',
         'float': '0 4px 12px rgba(0,0,0,0.15)',
+        'glow': '0 0 20px rgba(255, 122, 0, 0.3)',
       },
     },
   },

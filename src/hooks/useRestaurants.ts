@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getActiveTenants, getBranches, type Tenant, type Branch } from '@/lib/api';
 import { calculateDistance } from '@/lib/utils';
 import { useLocation } from '@/contexts/LocationContext';
@@ -19,6 +19,11 @@ export function useRestaurants() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const refetch = useCallback(async () => {
+    setRefreshKey(k => k + 1);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -29,7 +34,6 @@ export function useRestaurants() {
         setError(null);
 
         const tenants = await getActiveTenants();
-
         const restaurantList: Restaurant[] = [];
 
         for (const tenant of tenants) {
@@ -59,24 +63,19 @@ export function useRestaurants() {
         }
 
         if (!cancelled) {
-          // Sort by distance
           restaurantList.sort((a, b) => a.distance - b.distance);
           setRestaurants(restaurantList);
         }
       } catch (err: any) {
-        if (!cancelled) {
-          setError(err.message);
-        }
+        if (!cancelled) setError(err.message);
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     }
 
     fetchRestaurants();
     return () => { cancelled = true; };
-  }, [latitude, longitude]);
+  }, [latitude, longitude, refreshKey]);
 
-  return { restaurants, loading, error };
+  return { restaurants, loading, error, refetch };
 }
