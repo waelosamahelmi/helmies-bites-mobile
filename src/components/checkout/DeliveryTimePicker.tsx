@@ -38,7 +38,7 @@ export function DeliveryTimePicker({ onTimeChange, estimatedTime = 35 }: Deliver
     <div>
       <div className="flex items-center gap-2 mb-3">
         <Clock className="w-5 h-5 text-primary" />
-        <h3 className="text-sm font-bold text-text-primary dark:text-white">Delivery time</h3>
+        <h3 className="text-sm font-bold text-white">Delivery time</h3>
       </div>
 
       {/* Mode toggle */}
@@ -49,16 +49,16 @@ export function DeliveryTimePicker({ onTimeChange, estimatedTime = 35 }: Deliver
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all',
             mode === 'asap'
-              ? 'border-primary bg-primary/5'
-              : 'border-border dark:border-gray-700'
+              ? 'border-primary bg-primary/15'
+              : 'border-white/10'
           )}
         >
-          <Zap className={cn('w-4 h-4', mode === 'asap' ? 'text-primary' : 'text-text-tertiary')} />
+          <Zap className={cn('w-4 h-4', mode === 'asap' ? 'text-primary' : 'text-white/40')} />
           <div className="text-left">
-            <p className={cn('text-sm font-semibold', mode === 'asap' ? 'text-primary' : 'text-text-primary dark:text-white')}>
+            <p className={cn('text-sm font-semibold', mode === 'asap' ? 'text-primary' : 'text-white')}>
               ASAP
             </p>
-            <p className="text-[10px] text-text-tertiary">{estimatedTime}-{estimatedTime + 10} min</p>
+            <p className="text-[10px] text-white/40">{estimatedTime}-{estimatedTime + 10} min</p>
           </div>
         </motion.button>
 
@@ -68,16 +68,16 @@ export function DeliveryTimePicker({ onTimeChange, estimatedTime = 35 }: Deliver
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all',
             mode === 'scheduled'
-              ? 'border-primary bg-primary/5'
-              : 'border-border dark:border-gray-700'
+              ? 'border-primary bg-primary/15'
+              : 'border-white/10'
           )}
         >
-          <Clock className={cn('w-4 h-4', mode === 'scheduled' ? 'text-primary' : 'text-text-tertiary')} />
+          <Clock className={cn('w-4 h-4', mode === 'scheduled' ? 'text-primary' : 'text-white/40')} />
           <div className="text-left">
-            <p className={cn('text-sm font-semibold', mode === 'scheduled' ? 'text-primary' : 'text-text-primary dark:text-white')}>
+            <p className={cn('text-sm font-semibold', mode === 'scheduled' ? 'text-primary' : 'text-white')}>
               Schedule
             </p>
-            <p className="text-[10px] text-text-tertiary">Pick a time</p>
+            <p className="text-[10px] text-white/40">Pick a time</p>
           </div>
         </motion.button>
       </div>
@@ -90,7 +90,7 @@ export function DeliveryTimePicker({ onTimeChange, estimatedTime = 35 }: Deliver
           exit={{ height: 0, opacity: 0 }}
           className="overflow-hidden"
         >
-          <p className="text-xs font-semibold text-text-secondary mb-2">Today</p>
+          <p className="text-xs font-semibold text-white/60 mb-2">Today</p>
           <div className="grid grid-cols-4 gap-1.5">
             {slots.map(slot => (
               <button
@@ -100,7 +100,7 @@ export function DeliveryTimePicker({ onTimeChange, estimatedTime = 35 }: Deliver
                   'py-2 rounded-lg text-xs font-semibold transition-all',
                   selectedSlot === slot
                     ? 'bg-primary text-white'
-                    : 'bg-surface-secondary dark:bg-gray-800 text-text-secondary dark:text-gray-400 hover:bg-surface-tertiary'
+                    : 'bg-background text-white/60 hover:bg-muted'
                 )}
               >
                 {slot}

@@ -50,7 +50,7 @@ export default function ReferralPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+    <div className="min-h-screen bg-background">
       <BackHeader title="Invite Friends" />
 
       <FadeIn delay={0.1}>
@@ -72,10 +72,10 @@ export default function ReferralPage() {
 
       <FadeIn delay={0.2}>
         {/* Referral code */}
-        <div className="bg-white dark:bg-gray-900 mx-4 mt-4 rounded-2xl p-4">
-          <p className="text-xs font-semibold text-text-secondary dark:text-gray-400 mb-2">Your referral code</p>
+        <div className="glass-card mx-4 mt-4 rounded-2xl p-4">
+          <p className="text-xs font-semibold text-white/60 mb-2">Your referral code</p>
           <div className="flex items-center gap-3">
-            <div className="flex-1 bg-surface-secondary dark:bg-gray-800 rounded-xl px-4 py-3 font-mono text-lg font-black text-text-primary dark:text-white tracking-wider">
+            <div className="flex-1 bg-background rounded-xl px-4 py-3 font-mono text-lg font-black text-white tracking-wider">
               {referralCode}
             </div>
             <motion.button
@@ -104,26 +104,26 @@ export default function ReferralPage() {
 
       <FadeIn delay={0.3}>
         {/* How it works */}
-        <div className="bg-white dark:bg-gray-900 mx-4 mt-4 rounded-2xl p-4">
-          <h3 className="text-sm font-bold text-text-primary dark:text-white mb-4">How it works</h3>
+        <div className="glass-card mx-4 mt-4 rounded-2xl p-4">
+          <h3 className="text-sm font-bold text-white mb-4">How it works</h3>
           <div className="space-y-4">
             {rewards.map((step, i) => (
               <div key={step.step} className="flex items-start gap-3">
                 <div className="relative">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
-                    step.done ? 'bg-success text-white' : 'bg-surface-secondary dark:bg-gray-800 text-text-secondary dark:text-gray-400'
+                    step.done ? 'bg-success text-white' : 'bg-background text-white/60'
                   }`}>
                     {step.done ? <Check className="w-4 h-4" /> : step.step}
                   </div>
                   {i < rewards.length - 1 && (
                     <div className={`absolute left-1/2 top-8 w-0.5 h-8 -translate-x-1/2 ${
-                      step.done ? 'bg-success' : 'bg-border dark:bg-gray-700'
+                      step.done ? 'bg-success' : 'bg-border'
                     }`} />
                   )}
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-text-primary dark:text-white">{step.title}</p>
-                  <p className="text-xs text-text-secondary dark:text-gray-400">{step.desc}</p>
+                  <p className="text-sm font-semibold text-white">{step.title}</p>
+                  <p className="text-xs text-white/60">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -133,20 +133,20 @@ export default function ReferralPage() {
 
       <FadeIn delay={0.4}>
         {/* Stats */}
-        <div className="bg-white dark:bg-gray-900 mx-4 mt-4 mb-8 rounded-2xl p-4">
-          <h3 className="text-sm font-bold text-text-primary dark:text-white mb-3">Your referrals</h3>
+        <div className="glass-card mx-4 mt-4 mb-8 rounded-2xl p-4">
+          <h3 className="text-sm font-bold text-white mb-3">Your referrals</h3>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-2xl font-black text-primary">0</p>
-              <p className="text-[10px] text-text-tertiary dark:text-gray-500">Invited</p>
+              <p className="text-[10px] text-white/40">Invited</p>
             </div>
             <div>
               <p className="text-2xl font-black text-success">0</p>
-              <p className="text-[10px] text-text-tertiary dark:text-gray-500">Joined</p>
+              <p className="text-[10px] text-white/40">Joined</p>
             </div>
             <div>
               <p className="text-2xl font-black text-info">0 EUR</p>
-              <p className="text-[10px] text-text-tertiary dark:text-gray-500">Earned</p>
+              <p className="text-[10px] text-white/40">Earned</p>
             </div>
           </div>
         </div>

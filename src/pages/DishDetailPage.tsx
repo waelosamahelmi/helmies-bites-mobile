@@ -48,7 +48,7 @@ export default function DishDetailPage() {
   if (!item) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-text-secondary">Loading...</p>
+        <p className="text-white/60">Loading...</p>
       </div>
     );
   }
@@ -70,9 +70,9 @@ export default function DishDetailPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-background">
         {/* Hero image */}
-        <div className="relative h-72 bg-surface-tertiary">
+        <div className="relative h-72 bg-muted">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -95,7 +95,7 @@ export default function DishDetailPage() {
               onClick={() => navigate(-1)}
               className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-sm"
             >
-              <ChevronLeft className="w-6 h-6 text-text-primary" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </motion.button>
 
             <div className="flex items-center gap-2">
@@ -112,7 +112,7 @@ export default function DishDetailPage() {
                 }}
                 className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-sm"
               >
-                <Share2 className="w-5 h-5 text-text-primary" />
+                <Share2 className="w-5 h-5 text-white" />
               </motion.button>
 
               <motion.button
@@ -124,8 +124,8 @@ export default function DishDetailPage() {
                   className={cn(
                     'w-5 h-5',
                     isInWishlist
-                      ? 'fill-error text-error'
-                      : 'fill-transparent text-text-primary'
+                      ? 'fill-error text-red-400'
+                      : 'fill-transparent text-white'
                   )}
                 />
               </motion.button>
@@ -134,15 +134,15 @@ export default function DishDetailPage() {
         </div>
 
         {/* Content */}
-        <div className="px-5 py-6 -mt-6 bg-white rounded-t-3xl relative">
+        <div className="px-5 py-6 -mt-6 glass-card rounded-t-3xl relative">
           {/* Name and price row */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-text-primary mb-1">
+              <h1 className="text-2xl font-bold text-white mb-1">
                 {item.name}
               </h1>
               {item.category && (
-                <span className="text-sm text-text-secondary">
+                <span className="text-sm text-white/60">
                   {item.category.name_en || item.category.name}
                 </span>
               )}
@@ -158,7 +158,7 @@ export default function DishDetailPage() {
           <div className="flex items-center gap-4 mb-4">
             <RatingStars rating={4.5} reviewCount={128} size="sm" />
             {item.preparation_time_minutes && (
-              <div className="flex items-center gap-1 text-text-secondary">
+              <div className="flex items-center gap-1 text-white/60">
                 <Clock className="w-4 h-4" />
                 <span className="text-sm">{item.preparation_time_minutes} min</span>
               </div>
@@ -166,14 +166,14 @@ export default function DishDetailPage() {
           </div>
 
           {/* Description */}
-          <p className="text-text-secondary leading-relaxed mb-6">
+          <p className="text-white/60 leading-relaxed mb-6">
             {item.description}
           </p>
 
           {/* Dietary info */}
           {(item.allergens?.length > 0 || item.dietary_restrictions?.length > 0) && (
             <div className="mb-6">
-              <h3 className="font-semibold text-text-primary mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 Dietary Information
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -189,7 +189,7 @@ export default function DishDetailPage() {
                 {item.dietary_restrictions?.map((diet) => (
                   <span
                     key={diet}
-                    className="flex items-center gap-1 px-2 py-1 text-xs bg-primary-50 text-primary rounded-full"
+                    className="flex items-center gap-1 px-2 py-1 text-xs bg-primary/20 text-primary rounded-full"
                   >
                     <Leaf className="w-3 h-3" />
                     {diet}
@@ -202,10 +202,10 @@ export default function DishDetailPage() {
           {/* Ingredients */}
           {item.ingredients?.length > 0 && (
             <div className="mb-6">
-              <h3 className="font-semibold text-text-primary mb-2">
+              <h3 className="font-semibold text-white mb-2">
                 Ingredients
               </h3>
-              <p className="text-sm text-text-secondary">
+              <p className="text-sm text-white/60">
                 {item.ingredients.join(', ')}
               </p>
             </div>
@@ -217,12 +217,12 @@ export default function DishDetailPage() {
               onClick={() => setShowInstructions(!showInstructions)}
               className="flex items-center justify-between w-full py-2 text-left"
             >
-              <span className="font-semibold text-text-primary">
+              <span className="font-semibold text-white">
                 Special Instructions
               </span>
               <motion.span
                 animate={{ rotate: showInstructions ? 180 : 0 }}
-                className="text-text-secondary"
+                className="text-white/60"
               >
                 ▼
               </motion.span>
@@ -248,21 +248,21 @@ export default function DishDetailPage() {
 
           {/* Quantity selector */}
           <div className="flex items-center justify-between mb-8">
-            <span className="font-semibold text-text-primary">Quantity</span>
-            <div className="flex items-center gap-4 bg-surface-tertiary rounded-full px-4 py-2">
+            <span className="font-semibold text-white">Quantity</span>
+            <div className="flex items-center gap-4 bg-muted rounded-full px-4 py-2">
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 disabled={quantity <= 1}
-                className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center disabled:opacity-40"
+                className="w-8 h-8 rounded-full glass-card shadow-sm flex items-center justify-center disabled:opacity-40"
               >
-                <Minus className="w-4 h-4 text-text-primary" />
+                <Minus className="w-4 h-4 text-white" />
               </motion.button>
               <motion.span
                 key={quantity}
                 initial={{ scale: 1.2 }}
                 animate={{ scale: 1 }}
-                className="w-8 text-center font-bold text-lg text-text-primary"
+                className="w-8 text-center font-bold text-lg text-white"
               >
                 {quantity}
               </motion.span>
@@ -278,7 +278,7 @@ export default function DishDetailPage() {
 
           {/* Existing cart item notice */}
           {existingCartItem && (
-            <div className="mb-4 p-3 bg-primary-50 rounded-lg">
+            <div className="mb-4 p-3 bg-primary/20 rounded-lg">
               <p className="text-sm text-primary">
                 ✓ You already have {existingCartItem.quantity}x in your cart
               </p>

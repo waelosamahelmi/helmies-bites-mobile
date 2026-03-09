@@ -87,14 +87,14 @@ export default function CheckoutPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary pb-40">
+      <div className="min-h-screen bg-background pb-40">
         <Header title="Checkout" showBack />
 
         <div className="pt-header">
           {/* Customer Details */}
           <FadeIn>
-            <div className="bg-white p-4 mb-2">
-              <h2 className="font-semibold text-text-primary mb-4">
+            <div className="glass-card p-4 mb-2">
+              <h2 className="font-semibold text-white mb-4">
                 Contact Details
               </h2>
               <div className="space-y-3">
@@ -124,9 +124,9 @@ export default function CheckoutPage() {
 
           {/* Delivery Address */}
           <FadeIn delay={0.1}>
-            <div className="bg-white p-4 mb-2">
+            <div className="glass-card p-4 mb-2">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold text-text-primary">
+                <h2 className="font-semibold text-white">
                   Delivery Address
                 </h2>
                 <button
@@ -160,14 +160,14 @@ export default function CheckoutPage() {
                     exit={{ opacity: 0 }}
                     className="flex items-start gap-3"
                   >
-                    <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
                       <MapPin className="w-5 h-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-text-primary">
+                      <p className="font-medium text-white">
                         {city || 'Delivery Address'}
                       </p>
-                      <p className="text-sm text-text-secondary truncate">
+                      <p className="text-sm text-white/60 truncate">
                         {deliveryAddress || 'Please add your address'}
                       </p>
                     </div>
@@ -179,8 +179,8 @@ export default function CheckoutPage() {
 
           {/* Delivery Time */}
           <FadeIn delay={0.15}>
-            <div className="bg-white p-4 mb-2">
-              <h2 className="font-semibold text-text-primary mb-4">
+            <div className="glass-card p-4 mb-2">
+              <h2 className="font-semibold text-white mb-4">
                 Delivery Time
               </h2>
               <div className="grid grid-cols-2 gap-3">
@@ -189,8 +189,8 @@ export default function CheckoutPage() {
                   className={cn(
                     'flex items-center gap-2 p-3 rounded-xl border-2 transition-all',
                     deliveryTime === 'asap'
-                      ? 'border-primary bg-primary-50'
-                      : 'border-border'
+                      ? 'border-primary bg-primary/20'
+                      : 'border-white/10'
                   )}
                 >
                   <Clock
@@ -198,7 +198,7 @@ export default function CheckoutPage() {
                       'w-5 h-5',
                       deliveryTime === 'asap'
                         ? 'text-primary'
-                        : 'text-text-secondary'
+                        : 'text-white/60'
                     )}
                   />
                   <div className="text-left">
@@ -207,12 +207,12 @@ export default function CheckoutPage() {
                         'font-medium text-sm',
                         deliveryTime === 'asap'
                           ? 'text-primary'
-                          : 'text-text-primary'
+                          : 'text-white'
                       )}
                     >
                       ASAP
                     </p>
-                    <p className="text-xs text-text-secondary">25-35 min</p>
+                    <p className="text-xs text-white/60">25-35 min</p>
                   </div>
                 </button>
 
@@ -221,8 +221,8 @@ export default function CheckoutPage() {
                   className={cn(
                     'flex items-center gap-2 p-3 rounded-xl border-2 transition-all',
                     deliveryTime === 'scheduled'
-                      ? 'border-primary bg-primary-50'
-                      : 'border-border'
+                      ? 'border-primary bg-primary/20'
+                      : 'border-white/10'
                   )}
                 >
                   <Clock
@@ -230,7 +230,7 @@ export default function CheckoutPage() {
                       'w-5 h-5',
                       deliveryTime === 'scheduled'
                         ? 'text-primary'
-                        : 'text-text-secondary'
+                        : 'text-white/60'
                     )}
                   />
                   <div className="text-left">
@@ -239,12 +239,12 @@ export default function CheckoutPage() {
                         'font-medium text-sm',
                         deliveryTime === 'scheduled'
                           ? 'text-primary'
-                          : 'text-text-primary'
+                          : 'text-white'
                       )}
                     >
                       Schedule
                     </p>
-                    <p className="text-xs text-text-secondary">Pick time</p>
+                    <p className="text-xs text-white/60">Pick time</p>
                   </div>
                 </button>
               </div>
@@ -253,8 +253,8 @@ export default function CheckoutPage() {
 
           {/* Payment Method */}
           <FadeIn delay={0.2}>
-            <div className="bg-white p-4 mb-2">
-              <h2 className="font-semibold text-text-primary mb-4">
+            <div className="glass-card p-4 mb-2">
+              <h2 className="font-semibold text-white mb-4">
                 Payment Method
               </h2>
               <div className="space-y-2">
@@ -268,8 +268,8 @@ export default function CheckoutPage() {
                     className={cn(
                       'flex items-center justify-between w-full p-4 rounded-xl border-2 transition-all',
                       paymentMethod === method.id
-                        ? 'border-primary bg-primary-50'
-                        : 'border-border'
+                        ? 'border-primary bg-primary/20'
+                        : 'border-white/10'
                     )}
                   >
                     <div className="flex items-center gap-3">
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
                           'w-5 h-5',
                           paymentMethod === method.id
                             ? 'text-primary'
-                            : 'text-text-secondary'
+                            : 'text-white/60'
                         )}
                       />
                       <span
@@ -286,7 +286,7 @@ export default function CheckoutPage() {
                           'font-medium',
                           paymentMethod === method.id
                             ? 'text-primary'
-                            : 'text-text-primary'
+                            : 'text-white'
                         )}
                       >
                         {method.label}
@@ -303,8 +303,8 @@ export default function CheckoutPage() {
 
           {/* Delivery Instructions */}
           <FadeIn delay={0.25}>
-            <div className="bg-white p-4 mb-2">
-              <h2 className="font-semibold text-text-primary mb-3">
+            <div className="glass-card p-4 mb-2">
+              <h2 className="font-semibold text-white mb-3">
                 Delivery Instructions (Optional)
               </h2>
               <Textarea
@@ -317,8 +317,8 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <FadeIn delay={0.3}>
-            <div className="bg-white p-4">
-              <h2 className="font-semibold text-text-primary mb-4">
+            <div className="glass-card p-4">
+              <h2 className="font-semibold text-white mb-4">
                 Order Summary
               </h2>
 
@@ -329,20 +329,20 @@ export default function CheckoutPage() {
                     key={item.menuItem.id}
                     className="flex justify-between text-sm"
                   >
-                    <span className="text-text-secondary">
+                    <span className="text-white/60">
                       {item.quantity}x {item.menuItem.name}
                     </span>
-                    <span className="text-text-primary">
+                    <span className="text-white">
                       €{(item.menuItem.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-border pt-4 space-y-2">
+              <div className="border-t border-white/10 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary">Subtotal</span>
-                  <span className="text-text-primary">
+                  <span className="text-white/60">Subtotal</span>
+                  <span className="text-white">
                     €{subtotal.toFixed(2)}
                   </span>
                 </div>
@@ -355,8 +355,8 @@ export default function CheckoutPage() {
                   </div>
                 )}
                 <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary">Delivery Fee</span>
-                  <span className="text-text-primary">
+                  <span className="text-white/60">Delivery Fee</span>
+                  <span className="text-white">
                     €{deliveryFee.toFixed(2)}
                   </span>
                 </div>
@@ -369,11 +369,11 @@ export default function CheckoutPage() {
         <motion.div
           initial={{ y: 100 }}
           animate={{ y: 0 }}
-          className="fixed bottom-0 left-0 right-0 bg-white border-t border-border px-4 py-4 pb-safe-bottom shadow-sheet max-w-lg mx-auto"
+          className="fixed bottom-0 left-0 right-0 glass-card border-t border-white/10 px-4 py-4 pb-safe-bottom shadow-sheet max-w-lg mx-auto"
         >
           <div className="flex items-center justify-between mb-4">
-            <span className="text-text-secondary">Total</span>
-            <span className="text-2xl font-bold text-text-primary">
+            <span className="text-white/60">Total</span>
+            <span className="text-2xl font-bold text-white">
               €{total.toFixed(2)}
             </span>
           </div>

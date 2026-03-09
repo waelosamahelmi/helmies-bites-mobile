@@ -27,9 +27,9 @@ export function SectionHeader({
       )}
     >
       <div>
-        <h2 className="font-bold text-lg text-text-primary">{title}</h2>
+        <h2 className="font-bold text-lg text-white">{title}</h2>
         {subtitle && (
-          <p className="text-sm text-text-secondary mt-0.5">{subtitle}</p>
+          <p className="text-sm text-white/60 mt-0.5">{subtitle}</p>
         )}
       </div>
 

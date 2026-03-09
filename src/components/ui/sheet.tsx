@@ -40,19 +40,19 @@ export function Sheet({ open, onClose, children, title, className, fullHeight }:
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             className={cn(
-              'fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-sheet',
+              'fixed bottom-0 left-0 right-0 z-50 glass-card rounded-t-3xl shadow-sheet',
               fullHeight ? 'top-4' : 'max-h-[90vh]',
               className
             )}
           >
-            <div className="flex items-center justify-between p-4 border-b border-border">
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
               <div className="w-10 h-1 bg-border-strong rounded-full absolute top-2 left-1/2 -translate-x-1/2" />
-              {title && <h2 className="text-lg font-bold text-text-primary mt-2">{title}</h2>}
+              {title && <h2 className="text-lg font-bold text-white mt-2">{title}</h2>}
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-full bg-surface-secondary flex items-center justify-center mt-2 ml-auto"
+                className="w-8 h-8 rounded-full bg-background flex items-center justify-center mt-2 ml-auto"
               >
-                <X className="w-4 h-4 text-text-secondary" />
+                <X className="w-4 h-4 text-white/60" />
               </button>
             </div>
             <div className="overflow-y-auto max-h-[calc(90vh-60px)]">

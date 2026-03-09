@@ -75,7 +75,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+    <div className="min-h-screen bg-background">
       <BackHeader
         title="Notifications"
         rightAction={
@@ -108,8 +108,8 @@ export default function NotificationsPage() {
                 >
                   <button
                     onClick={() => markRead(notif.id)}
-                    className={`w-full text-left flex gap-3 p-4 border-b border-border dark:border-gray-800 transition-colors ${
-                      notif.read ? 'bg-white dark:bg-gray-900' : 'bg-primary/5 dark:bg-primary/10'
+                    className={`w-full text-left flex gap-3 p-4 border-b border-white/10 transition-colors ${
+                      notif.read ? 'glass-card' : 'bg-primary/15'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconColors[notif.type]}`}>
@@ -117,13 +117,13 @@ export default function NotificationsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className="text-sm font-bold text-text-primary dark:text-white">{notif.title}</h3>
+                        <h3 className="text-sm font-bold text-white">{notif.title}</h3>
                         {!notif.read && (
                           <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-1.5" />
                         )}
                       </div>
-                      <p className="text-xs text-text-secondary dark:text-gray-400 mt-0.5 line-clamp-2">{notif.message}</p>
-                      <p className="text-[10px] text-text-tertiary dark:text-gray-600 mt-1">
+                      <p className="text-xs text-white/60 mt-0.5 line-clamp-2">{notif.message}</p>
+                      <p className="text-[10px] text-white/40 mt-1">
                         {format(new Date(notif.timestamp), 'MMM d, h:mm a')}
                       </p>
                     </div>
@@ -131,7 +131,7 @@ export default function NotificationsPage() {
                       onClick={(e) => { e.stopPropagation(); deleteNotification(notif.id); }}
                       className="p-1 flex-shrink-0 opacity-0 group-hover:opacity-100"
                     >
-                      <Trash2 className="w-4 h-4 text-text-tertiary" />
+                      <Trash2 className="w-4 h-4 text-white/40" />
                     </button>
                   </button>
                 </motion.div>

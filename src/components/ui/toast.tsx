@@ -14,7 +14,7 @@ const icons = {
 const colors = {
   success: 'bg-primary text-white',
   error: 'bg-error text-white',
-  warning: 'bg-warning text-text-primary',
+  warning: 'bg-warning text-white',
   info: 'bg-info text-white',
 };
 

@@ -139,17 +139,17 @@ export function MenuItemModal({ item, open, onClose }: MenuItemModalProps) {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 rounded-t-3xl max-h-[92vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-50 glass-card rounded-t-3xl max-h-[92vh] overflow-y-auto"
           >
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 dark:bg-gray-800 shadow-card flex items-center justify-center"
+              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-white/90 shadow-glass flex items-center justify-center"
             >
-              <X className="w-4 h-4 dark:text-white" />
+              <X className="w-4 h-4" />
             </button>
 
             {item.image_url && (
-              <div className="h-56 bg-surface-tertiary dark:bg-gray-800 relative">
+              <div className="h-56 bg-muted relative">
                 <img src={item.image_url || placeholderImg} alt={item.name} className="w-full h-full object-cover" />
                 {item.is_popular && (
                   <motion.div
@@ -164,10 +164,10 @@ export function MenuItemModal({ item, open, onClose }: MenuItemModalProps) {
             )}
 
             <div className="p-4">
-              <h2 className="text-xl font-black text-text-primary dark:text-white">{item.name_en || item.name}</h2>
+              <h2 className="text-xl font-black text-white">{item.name_en || item.name}</h2>
               <p className="text-base font-bold text-primary mt-1">{formatPrice(item.price)}</p>
               {(item.description_en || item.description) && (
-                <p className="text-sm text-text-secondary dark:text-gray-400 mt-2">{item.description_en || item.description}</p>
+                <p className="text-sm text-white/60 mt-2">{item.description_en || item.description}</p>
               )}
 
               {item.allergens?.length > 0 && (
@@ -192,9 +192,9 @@ export function MenuItemModal({ item, open, onClose }: MenuItemModalProps) {
               {customizations.map(group => (
                 <div key={group.id} className="mt-5">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-bold text-text-primary dark:text-white">{group.name}</h3>
+                    <h3 className="text-sm font-bold text-white">{group.name}</h3>
                     {group.required && (
-                      <span className="text-[10px] font-semibold text-error bg-error/10 px-2 py-0.5 rounded-full">Required</span>
+                      <span className="text-[10px] font-semibold text-red-400 bg-error/10 px-2 py-0.5 rounded-full">Required</span>
                     )}
                   </div>
                   <div className="space-y-1.5">
@@ -207,17 +207,17 @@ export function MenuItemModal({ item, open, onClose }: MenuItemModalProps) {
                           onClick={() => toggleOption(group.id, opt.id, group.type)}
                           className={cn(
                             'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl border-2 transition-all',
-                            isSelected ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-border dark:border-gray-700'
+                            isSelected ? 'border-primary bg-primary/15' : 'border-white/10'
                           )}
                         >
                           <div className={cn(
                             'w-5 h-5 border-2 flex items-center justify-center flex-shrink-0 transition-colors',
                             group.type === 'multiple' ? 'rounded-md' : 'rounded-full',
-                            isSelected ? 'border-primary bg-primary' : 'border-border-strong dark:border-gray-600'
+                            isSelected ? 'border-primary bg-primary' : 'border-white/10-strong dark:border-gray-600'
                           )}>
                             {isSelected && <Check className="w-3 h-3 text-white" />}
                           </div>
-                          <span className="flex-1 text-sm text-text-primary dark:text-white text-left font-medium">{opt.name}</span>
+                          <span className="flex-1 text-sm text-white text-left font-medium">{opt.name}</span>
                           {opt.price > 0 && <span className="text-xs font-semibold text-primary">+{formatPrice(opt.price)}</span>}
                         </motion.button>
                       );
@@ -227,25 +227,25 @@ export function MenuItemModal({ item, open, onClose }: MenuItemModalProps) {
               ))}
 
               <div className="mt-5">
-                <label className="text-sm font-bold text-text-primary dark:text-white block mb-1.5">Special instructions</label>
+                <label className="text-sm font-bold text-white block mb-1.5">Special instructions</label>
                 <textarea
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
                   placeholder="e.g. No onions, extra sauce..."
-                  className="w-full h-20 rounded-xl bg-surface-secondary dark:bg-gray-800 px-3 py-2.5 text-sm text-text-primary dark:text-white placeholder:text-text-tertiary resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 border border-transparent focus:border-primary"
+                  className="w-full h-20 rounded-xl bg-background px-3 py-2.5 text-sm text-white placeholder:text-white/40 resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 border border-transparent focus:border-primary"
                 />
               </div>
 
               <div className="flex items-center gap-4 mt-6 pb-safe">
-                <div className="flex items-center bg-surface-secondary dark:bg-gray-800 rounded-xl">
+                <div className="flex items-center bg-background rounded-xl">
                   <button onClick={() => { setQuantity(q => Math.max(1, q - 1)); haptics.impact('light'); }} className="w-10 h-10 flex items-center justify-center">
-                    <Minus className="w-4 h-4 text-text-primary dark:text-white" />
+                    <Minus className="w-4 h-4 text-white" />
                   </button>
-                  <motion.span key={quantity} initial={{ scale: 1.3 }} animate={{ scale: 1 }} className="w-8 text-center text-sm font-bold text-text-primary dark:text-white">
+                  <motion.span key={quantity} initial={{ scale: 1.3 }} animate={{ scale: 1 }} className="w-8 text-center text-sm font-bold text-white">
                     {quantity}
                   </motion.span>
                   <button onClick={() => { setQuantity(q => q + 1); haptics.impact('light'); }} className="w-10 h-10 flex items-center justify-center">
-                    <Plus className="w-4 h-4 text-text-primary dark:text-white" />
+                    <Plus className="w-4 h-4 text-white" />
                   </button>
                 </div>
                 <Button onClick={handleAdd} className="flex-1 h-12" size="lg">

@@ -80,8 +80,8 @@ export default function RestaurantPage() {
 
   if (!restaurant && !loading) {
     return (
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950 flex items-center justify-center">
-        <p className="text-text-secondary dark:text-gray-400">Restaurant not found</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-white/60">Restaurant not found</p>
       </div>
     );
   }
@@ -98,7 +98,7 @@ export default function RestaurantPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <BackHeader
           transparent
           rightAction={
@@ -106,21 +106,21 @@ export default function RestaurantPage() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setShowInfo(true)}
-                  className="w-10 h-10 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-card flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-white/90 shadow-glass flex items-center justify-center"
                 >
-                  <Info className="w-5 h-5 text-text-secondary dark:text-gray-400" />
+                  <Info className="w-5 h-5 text-white/60" />
                 </button>
                 <button
                   onClick={() => setShowGallery(true)}
-                  className="w-10 h-10 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-card flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-white/90 shadow-glass flex items-center justify-center"
                 >
-                  <Camera className="w-5 h-5 text-text-secondary dark:text-gray-400" />
+                  <Camera className="w-5 h-5 text-white/60" />
                 </button>
                 <button
                   onClick={() => { toggleFavorite(restaurant.tenant.id); haptics.impact('medium'); }}
-                  className="w-10 h-10 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-card flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-white/90 shadow-glass flex items-center justify-center"
                 >
-                  <Heart className={cn('w-5 h-5', fav ? 'fill-error text-error' : 'text-text-secondary dark:text-gray-400')} />
+                  <Heart className={cn('w-5 h-5', fav ? 'fill-error text-red-400' : 'text-white/60')} />
                 </button>
               </div>
             )
@@ -142,7 +142,7 @@ export default function RestaurantPage() {
 
         {/* Category tabs - sticky */}
         {categories.length > 0 && (
-          <div ref={tabsRef} className="sticky top-0 z-20 bg-white dark:bg-gray-900 border-b border-border dark:border-gray-800">
+          <div ref={tabsRef} className="sticky top-0 z-20 glass-card border-b border-white/10">
             <div className="overflow-x-auto hide-scrollbar">
               <div className="flex px-4 gap-1">
                 {categories.map(cat => (
@@ -153,7 +153,7 @@ export default function RestaurantPage() {
                       'px-3 py-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors',
                       activeSection === cat.id
                         ? 'border-primary text-primary'
-                        : 'border-transparent text-text-secondary dark:text-gray-400 hover:text-text-primary dark:hover:text-white'
+                        : 'border-transparent text-white/60 hover:text-white'
                     )}
                   >
                     {cat.name_en || cat.name}
@@ -166,7 +166,7 @@ export default function RestaurantPage() {
 
         {/* Menu sections */}
         {loading ? (
-          <div className="bg-white dark:bg-gray-900 mt-2">
+          <div className="glass-card mt-2">
             {Array.from({ length: 5 }).map((_, i) => <MenuItemSkeleton key={i} />)}
           </div>
         ) : (
@@ -187,8 +187,8 @@ export default function RestaurantPage() {
             <div className="px-4 mt-6 mb-4">
               <div className="flex items-center gap-2 mb-3">
                 <Star className="w-4 h-4 text-warning fill-warning" />
-                <h3 className="text-sm font-bold text-text-primary dark:text-white">Reviews</h3>
-                <span className="text-xs text-text-tertiary dark:text-gray-500">({demoReviews.length})</span>
+                <h3 className="text-sm font-bold text-white">Reviews</h3>
+                <span className="text-xs text-white/40">({demoReviews.length})</span>
               </div>
               <div className="space-y-3">
                 {demoReviews.map(review => (

@@ -51,7 +51,7 @@ export function SwipeableItem({ children, onDelete, deleteLabel = 'Delete' }: Sw
         animate={{ x: isOpen ? -80 : 0 }}
         transition={{ type: 'spring', damping: 25, stiffness: 300 }}
         style={{ x }}
-        className="relative z-10 bg-white"
+        className="relative z-10 glass-card"
       >
         {children}
       </motion.div>

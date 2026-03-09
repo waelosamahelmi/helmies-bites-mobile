@@ -70,7 +70,7 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <BackHeader title="Order details" />
         <div className="p-4 space-y-4">
           <Skeleton className="h-6 w-40" />
@@ -83,9 +83,9 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <BackHeader title="Order details" />
-        <p className="text-center text-text-secondary dark:text-gray-400 mt-8">Order not found</p>
+        <p className="text-center text-white/60 mt-8">Order not found</p>
       </div>
     );
   }
@@ -97,7 +97,7 @@ export default function OrderDetailPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <BackHeader title="Order details" />
 
         {/* ETA countdown for active orders */}
@@ -121,9 +121,9 @@ export default function OrderDetailPage() {
 
         {/* Status */}
         <FadeIn delay={0.1}>
-          <div className="bg-white dark:bg-gray-900 p-4 mt-2 mx-4 rounded-2xl">
+          <div className="glass-card p-4 mt-2 mx-4 rounded-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-black text-text-primary dark:text-white">{getOrderStatusText(order.status)}</h2>
+              <h2 className="text-lg font-black text-white">{getOrderStatusText(order.status)}</h2>
               <Badge variant={isCancelled ? 'error' : isDelivered ? 'success' : 'primary'}>{order.status}</Badge>
             </div>
 
@@ -139,17 +139,17 @@ export default function OrderDetailPage() {
                         animate={isCurrentStep ? { scale: [1, 1.15, 1] } : {}}
                         transition={{ duration: 1.5, repeat: Infinity }}
                         className={`w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
-                          isActive ? 'bg-primary text-white' : 'bg-surface-secondary dark:bg-gray-800 text-text-tertiary'
+                          isActive ? 'bg-primary text-white' : 'bg-background text-white/40'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
                       </motion.div>
-                      <span className={`text-[9px] font-medium ${isActive ? 'text-primary' : 'text-text-tertiary dark:text-gray-600'}`}>
+                      <span className={`text-[9px] font-medium ${isActive ? 'text-primary' : 'text-white/40'}`}>
                         {step.label}
                       </span>
                       {i < statusSteps.length - 1 && (
                         <div className={`absolute top-4 left-[calc(50%+18px)] h-0.5 ${
-                          i < currentStepIndex ? 'bg-primary' : 'bg-surface-tertiary dark:bg-gray-700'
+                          i < currentStepIndex ? 'bg-primary' : 'bg-muted'
                         }`} style={{ width: '40px' }} />
                       )}
                     </div>
@@ -162,13 +162,13 @@ export default function OrderDetailPage() {
 
         {/* Items */}
         <FadeIn delay={0.15}>
-          <div className="bg-white dark:bg-gray-900 mt-3 mx-4 rounded-2xl p-4">
-            <h3 className="text-sm font-bold text-text-primary dark:text-white mb-3">Order items</h3>
+          <div className="glass-card mt-3 mx-4 rounded-2xl p-4">
+            <h3 className="text-sm font-bold text-white mb-3">Order items</h3>
             <div className="space-y-2">
               {order.items?.map((item, i) => (
                 <div key={i} className="flex justify-between text-sm">
-                  <span className="text-text-secondary dark:text-gray-400">{item.quantity}x {item.name}</span>
-                  <span className="font-semibold dark:text-white">{formatPrice(item.price * item.quantity)}</span>
+                  <span className="text-white/60">{item.quantity}x {item.name}</span>
+                  <span className="font-semibold">{formatPrice(item.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
@@ -178,14 +178,14 @@ export default function OrderDetailPage() {
         {/* Delivery */}
         {order.delivery_address && (
           <FadeIn delay={0.2}>
-            <div className="bg-white dark:bg-gray-900 mt-3 mx-4 rounded-2xl p-4">
+            <div className="glass-card mt-3 mx-4 rounded-2xl p-4">
               <div className="flex items-center gap-2 mb-2">
                 <MapPin className="w-4 h-4 text-primary" />
-                <h3 className="text-sm font-bold text-text-primary dark:text-white">Delivery address</h3>
+                <h3 className="text-sm font-bold text-white">Delivery address</h3>
               </div>
-              <p className="text-sm text-text-secondary dark:text-gray-400">{order.delivery_address.street}</p>
+              <p className="text-sm text-white/60">{order.delivery_address.street}</p>
               {order.delivery_instructions && (
-                <p className="text-xs text-text-tertiary dark:text-gray-500 mt-1">Note: {order.delivery_instructions}</p>
+                <p className="text-xs text-white/40 mt-1">Note: {order.delivery_instructions}</p>
               )}
             </div>
           </FadeIn>
@@ -193,18 +193,18 @@ export default function OrderDetailPage() {
 
         {/* Summary */}
         <FadeIn delay={0.25}>
-          <div className="bg-white dark:bg-gray-900 mt-3 mx-4 rounded-2xl p-4">
+          <div className="glass-card mt-3 mx-4 rounded-2xl p-4">
             <div className="space-y-1.5">
               <div className="flex justify-between text-sm">
-                <span className="text-text-secondary dark:text-gray-400">Subtotal</span>
-                <span className="font-semibold dark:text-white">{formatPrice(order.subtotal)}</span>
+                <span className="text-white/60">Subtotal</span>
+                <span className="font-semibold">{formatPrice(order.subtotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-text-secondary dark:text-gray-400">Delivery fee</span>
-                <span className="font-semibold dark:text-white">{formatPrice(order.delivery_fee)}</span>
+                <span className="text-white/60">Delivery fee</span>
+                <span className="font-semibold">{formatPrice(order.delivery_fee)}</span>
               </div>
-              <div className="border-t border-border dark:border-gray-800 pt-2 flex justify-between">
-                <span className="font-bold dark:text-white">Total</span>
+              <div className="border-t border-white/10 pt-2 flex justify-between">
+                <span className="font-bold">Total</span>
                 <span className="font-black text-primary">{formatPrice(order.total_amount)}</span>
               </div>
             </div>
@@ -213,12 +213,12 @@ export default function OrderDetailPage() {
 
         {/* Payment & time */}
         <FadeIn delay={0.3}>
-          <div className="bg-white dark:bg-gray-900 mt-3 mx-4 rounded-2xl p-4">
-            <div className="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-400">
+          <div className="glass-card mt-3 mx-4 rounded-2xl p-4">
+            <div className="flex items-center gap-2 text-sm text-white/60">
               <CreditCard className="w-4 h-4" />
               <span>{order.payment_method === 'stripe' ? 'Card payment' : 'Cash'}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-text-secondary dark:text-gray-400 mt-2">
+            <div className="flex items-center gap-2 text-sm text-white/60 mt-2">
               <Clock className="w-4 h-4" />
               <span>{format(new Date(order.created_at), 'MMMM d, yyyy · HH:mm')}</span>
             </div>

@@ -76,7 +76,7 @@ export function StoriesCarousel({ restaurants }: StoriesCarouselProps) {
                   />
                 </div>
               </div>
-              <span className="text-[10px] font-medium text-text-secondary dark:text-gray-400 max-w-[64px] truncate">
+              <span className="text-[10px] font-medium text-white/60 max-w-[64px] truncate">
                 {story.restaurant.tenant.name_en || story.restaurant.tenant.name}
               </span>
             </button>
@@ -98,7 +98,7 @@ export function StoriesCarousel({ restaurants }: StoriesCarouselProps) {
               {stories.map((_, i) => (
                 <div key={i} className="flex-1 h-0.5 bg-white/30 rounded-full overflow-hidden">
                   <motion.div
-                    className="h-full bg-white rounded-full"
+                    className="h-full glass-card rounded-full"
                     initial={{ width: i < activeStory ? '100%' : '0%' }}
                     animate={{
                       width: i < activeStory ? '100%' : i === activeStory ? '100%' : '0%',

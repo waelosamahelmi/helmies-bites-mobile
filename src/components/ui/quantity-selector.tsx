@@ -67,7 +67,7 @@ export function QuantitySelector({
   return (
     <div
       className={cn(
-        'flex items-center justify-center rounded-full bg-surface-tertiary',
+        'flex items-center justify-center rounded-full bg-muted',
         sizeStyles.container,
         className
       )}
@@ -80,8 +80,8 @@ export function QuantitySelector({
           'flex items-center justify-center rounded-full transition-colors',
           'disabled:opacity-40 disabled:cursor-not-allowed',
           quantity === 1 && showDeleteOnZero && onRemove
-            ? 'bg-error/10 text-error hover:bg-error/20'
-            : 'bg-white text-text-primary hover:bg-gray-50 shadow-sm',
+            ? 'bg-error/10 text-red-400 hover:bg-error/20'
+            : 'glass-card text-white hover:bg-gray-50 shadow-sm',
           sizeStyles.button
         )}
       >
@@ -97,7 +97,7 @@ export function QuantitySelector({
         initial={{ scale: 1.2 }}
         animate={{ scale: 1 }}
         className={cn(
-          'font-semibold text-text-primary text-center',
+          'font-semibold text-white text-center',
           sizeStyles.text
         )}
       >

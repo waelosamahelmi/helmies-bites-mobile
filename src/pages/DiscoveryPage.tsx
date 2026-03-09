@@ -46,7 +46,7 @@ export default function DiscoveryPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <OfflineBanner />
         <Header />
 
@@ -59,7 +59,7 @@ export default function DiscoveryPage() {
           )}
 
           {/* Category filter */}
-          <div className="bg-white dark:bg-gray-900">
+          <div className="glass-card">
             <CategoryScroller activeCategory={activeCategory} onSelect={setActiveCategory} />
           </div>
 
@@ -69,7 +69,7 @@ export default function DiscoveryPage() {
               <div className="pt-4">
                 <div className="flex items-center gap-2 px-4 mb-2">
                   <Sparkles className="w-4 h-4 text-primary" />
-                  <h3 className="text-sm font-bold text-text-primary dark:text-white">Explore</h3>
+                  <h3 className="text-sm font-bold text-white">Explore</h3>
                 </div>
                 <FeaturedCollections restaurants={restaurants} />
               </div>
@@ -157,11 +157,11 @@ export default function DiscoveryPage() {
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <div className="w-16 h-16 mx-auto rounded-full bg-surface-tertiary dark:bg-gray-800 flex items-center justify-center mb-4">
-                    <MapPin className="w-8 h-8 text-text-tertiary" />
+                  <div className="w-16 h-16 mx-auto rounded-full bg-muted flex items-center justify-center mb-4">
+                    <MapPin className="w-8 h-8 text-white/40" />
                   </div>
-                  <h3 className="text-base font-bold text-text-primary dark:text-white mb-1">No restaurants found</h3>
-                  <p className="text-sm text-text-secondary dark:text-gray-400">Try a different category or location</p>
+                  <h3 className="text-base font-bold text-white mb-1">No restaurants found</h3>
+                  <p className="text-sm text-white/60">Try a different category or location</p>
                 </div>
               )}
             </div>

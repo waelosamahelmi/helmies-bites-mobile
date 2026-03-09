@@ -37,7 +37,7 @@ export default function OrdersPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-background">
         <Header />
         <EmptyState
           icon={<ClipboardList className="w-10 h-10" />}
@@ -50,15 +50,15 @@ export default function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
-      <div className="bg-white px-4 py-4 safe-top">
-        <h1 className="text-xl font-black text-text-primary">Orders</h1>
+    <div className="min-h-screen bg-background">
+      <div className="glass-card px-4 py-4 safe-top">
+        <h1 className="text-xl font-black text-white">Orders</h1>
       </div>
 
       {loading ? (
         <div className="space-y-2 mt-2">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="bg-white p-4 space-y-2">
+            <div key={i} className="glass-card p-4 space-y-2">
               <Skeleton className="h-5 w-40" />
               <Skeleton className="h-4 w-24" />
               <Skeleton className="h-4 w-32" />
@@ -78,7 +78,7 @@ export default function OrdersPage() {
             <button
               key={order.id}
               onClick={() => navigate(`/orders/${order.id}`)}
-              className="w-full bg-white p-4 text-left flex items-center justify-between"
+              className="w-full glass-card p-4 text-left flex items-center justify-between"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
@@ -91,17 +91,17 @@ export default function OrdersPage() {
                     {getOrderStatusText(order.status)}
                   </Badge>
                 </div>
-                <p className="text-sm font-bold text-text-primary">
+                <p className="text-sm font-bold text-white">
                   {order.items?.length || 0} items  {formatPrice(order.total_amount)}
                 </p>
-                <div className="flex items-center gap-1 mt-1 text-text-tertiary">
+                <div className="flex items-center gap-1 mt-1 text-white/40">
                   <Clock className="w-3 h-3" />
                   <span className="text-xs">
                     {format(new Date(order.created_at), 'MMM d, yyyy  HH:mm')}
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-text-tertiary flex-shrink-0" />
+              <ChevronRight className="w-5 h-5 text-white/40 flex-shrink-0" />
             </button>
           ))}
         </div>

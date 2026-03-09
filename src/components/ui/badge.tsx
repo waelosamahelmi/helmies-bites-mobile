@@ -13,11 +13,11 @@ export function Badge({ children, variant = 'default', size = 'sm', className }:
       className={cn(
         'inline-flex items-center font-medium rounded-full',
         {
-          'bg-surface-secondary text-text-secondary': variant === 'default',
+          'bg-background text-white/60': variant === 'default',
           'bg-primary/10 text-primary': variant === 'primary',
           'bg-success/10 text-success': variant === 'success',
           'bg-warning/10 text-warning': variant === 'warning',
-          'bg-error/10 text-error': variant === 'error',
+          'bg-error/10 text-red-400': variant === 'error',
         },
         {
           'px-2 py-0.5 text-xs': size === 'sm',

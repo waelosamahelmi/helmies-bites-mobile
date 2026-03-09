@@ -10,8 +10,8 @@ export function SectionHeader({ title, subtitle, onSeeAll }: SectionHeaderProps)
   return (
     <div className="flex items-center justify-between px-4 pt-6 pb-2">
       <div>
-        <h2 className="text-lg font-black text-text-primary">{title}</h2>
-        {subtitle && <p className="text-xs text-text-secondary mt-0.5">{subtitle}</p>}
+        <h2 className="text-lg font-black text-white">{title}</h2>
+        {subtitle && <p className="text-xs text-white/60 mt-0.5">{subtitle}</p>}
       </div>
       {onSeeAll && (
         <button

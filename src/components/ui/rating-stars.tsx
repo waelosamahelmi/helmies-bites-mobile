@@ -79,12 +79,12 @@ export function RatingStars({
         })}
       </div>
       {showNumber && (
-        <span className={cn('font-medium text-text-primary', textSizes[size])}>
+        <span className={cn('font-medium text-white', textSizes[size])}>
           {rating.toFixed(1)}
         </span>
       )}
       {reviewCount !== undefined && (
-        <span className={cn('text-text-secondary', textSizes[size])}>
+        <span className={cn('text-white/60', textSizes[size])}>
           ({reviewCount})
         </span>
       )}

@@ -18,7 +18,7 @@ export function TabBar({ tabs, activeTab, onChange, className }: TabBarProps) {
             'px-4 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all',
             activeTab === tab.id
               ? 'bg-text-primary text-white'
-              : 'bg-surface-secondary text-text-secondary hover:bg-surface-tertiary'
+              : 'bg-background text-white/60 hover:bg-muted'
           )}
         >
           {tab.label}

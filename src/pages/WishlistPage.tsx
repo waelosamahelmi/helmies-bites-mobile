@@ -31,7 +31,7 @@ export default function WishlistPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary">
+      <div className="min-h-screen bg-background">
         <Header title="Wishlist" showBack showCart />
 
         <div className="pt-header">
@@ -39,13 +39,13 @@ export default function WishlistPage() {
             // Empty state
             <FadeIn>
               <div className="flex flex-col items-center justify-center px-8 py-20">
-                <div className="w-24 h-24 rounded-full bg-surface-tertiary flex items-center justify-center mb-6">
-                  <Heart className="w-12 h-12 text-text-tertiary" />
+                <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
+                  <Heart className="w-12 h-12 text-white/40" />
                 </div>
-                <h2 className="text-xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-white mb-2">
                   Your wishlist is empty
                 </h2>
-                <p className="text-text-secondary text-center mb-6">
+                <p className="text-white/60 text-center mb-6">
                   Save your favorite dishes here for quick access later
                 </p>
                 <Button onClick={() => navigate('/')}>
@@ -56,21 +56,21 @@ export default function WishlistPage() {
           ) : (
             <>
               {/* Actions header */}
-              <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-border">
-                <span className="text-sm text-text-secondary">
+              <div className="flex items-center justify-between px-4 py-3 glass-card border-b border-white/10">
+                <span className="text-sm text-white/60">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleClearWishlist}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-error hover:bg-error/5 rounded-lg transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-400 hover:bg-error/5 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                     Clear
                   </button>
                   <button
                     onClick={handleAddAllToCart}
-                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary bg-primary-50 rounded-lg font-medium"
+                    className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary bg-primary/20 rounded-lg font-medium"
                   >
                     <ShoppingBag className="w-4 h-4" />
                     Add All

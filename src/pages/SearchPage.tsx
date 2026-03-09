@@ -53,31 +53,31 @@ export default function SearchPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
-        <div className="bg-white dark:bg-gray-900 safe-top px-4 pb-3 pt-4">
+      <div className="min-h-screen bg-background">
+        <div className="glass-card safe-top px-4 pb-3 pt-4">
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-text-tertiary" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
               <input
                 type="text"
                 value={query}
                 onChange={(e) => handleSearch(e.target.value)}
                 placeholder="Search restaurants or cuisines..."
-                className="w-full h-12 rounded-xl bg-surface-secondary dark:bg-gray-800 pl-10 pr-10 text-sm text-text-primary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="w-full h-12 rounded-xl bg-background pl-10 pr-10 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/30"
                 autoFocus
               />
               {query && (
                 <button onClick={() => setQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <X className="w-4 h-4 text-text-tertiary" />
+                  <X className="w-4 h-4 text-white/40" />
                 </button>
               )}
             </div>
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowFilters(true)}
-              className="relative w-12 h-12 rounded-xl bg-surface-secondary dark:bg-gray-800 flex items-center justify-center"
+              className="relative w-12 h-12 rounded-xl bg-background flex items-center justify-center"
             >
-              <SlidersHorizontal className="w-5 h-5 text-text-secondary dark:text-gray-400" />
+              <SlidersHorizontal className="w-5 h-5 text-white/60" />
               {activeFilterCount > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-white text-[10px] font-bold flex items-center justify-center">
                   {activeFilterCount}
@@ -96,8 +96,8 @@ export default function SearchPage() {
                 onClick={() => setSortBy(opt.value)}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                   sortBy === opt.value
-                    ? 'bg-text-primary dark:bg-white text-white dark:text-gray-900'
-                    : 'bg-surface-secondary dark:bg-gray-800 text-text-secondary dark:text-gray-400'
+                    ? 'bg-white text-dark'
+                    : 'bg-background text-white/60'
                 }`}
               >
                 {opt.label}
@@ -114,20 +114,20 @@ export default function SearchPage() {
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4 text-text-tertiary" />
-                        <span className="text-xs font-bold text-text-secondary dark:text-gray-400">Recent</span>
+                        <Clock className="w-4 h-4 text-white/40" />
+                        <span className="text-xs font-bold text-white/60">Recent</span>
                       </div>
                       <button onClick={clearAll} className="text-xs text-primary font-semibold">Clear</button>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {searches.map(s => (
                         <button key={s} onClick={() => setQuery(s)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-gray-800 text-xs font-medium text-text-primary dark:text-white shadow-sm"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full glass-card text-xs font-medium text-white shadow-sm"
                         >
-                          <Clock className="w-3 h-3 text-text-tertiary" />
+                          <Clock className="w-3 h-3 text-white/40" />
                           {s}
                           <span onClick={(e) => { e.stopPropagation(); removeSearch(s); }} className="ml-0.5">
-                            <X className="w-3 h-3 text-text-tertiary" />
+                            <X className="w-3 h-3 text-white/40" />
                           </span>
                         </button>
                       ))}
@@ -139,12 +139,12 @@ export default function SearchPage() {
                 <div className="mb-6">
                   <div className="flex items-center gap-1.5 mb-2">
                     <TrendingUp className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-bold text-text-secondary dark:text-gray-400">Popular searches</span>
+                    <span className="text-xs font-bold text-white/60">Popular searches</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {suggestions.map(s => (
                       <button key={s} onClick={() => setQuery(s)}
-                        className="px-3 py-1.5 rounded-full bg-primary/5 dark:bg-primary/10 text-xs font-semibold text-primary"
+                        className="px-3 py-1.5 rounded-full bg-primary/15 text-xs font-semibold text-primary"
                       >
                         {s}
                       </button>
@@ -161,16 +161,16 @@ export default function SearchPage() {
             </div>
           ) : query && filtered.length > 0 ? (
             <>
-              <p className="text-xs text-text-secondary dark:text-gray-400 mb-3">{filtered.length} restaurants found</p>
+              <p className="text-xs text-white/60 mb-3">{filtered.length} restaurants found</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {filtered.map((r) => <RestaurantCard key={r.tenant.id + r.branch.id} restaurant={r} />)}
               </div>
             </>
           ) : query ? (
             <div className="text-center py-16">
-              <Search className="w-12 h-12 text-text-tertiary mx-auto mb-4" />
-              <h3 className="text-base font-bold text-text-primary dark:text-white mb-1">No results</h3>
-              <p className="text-sm text-text-secondary dark:text-gray-400">Try a different search term or adjust filters</p>
+              <Search className="w-12 h-12 text-white/40 mx-auto mb-4" />
+              <h3 className="text-base font-bold text-white mb-1">No results</h3>
+              <p className="text-sm text-white/60">Try a different search term or adjust filters</p>
             </div>
           ) : null}
         </div>

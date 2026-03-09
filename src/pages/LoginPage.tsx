@@ -11,6 +11,7 @@ export default function LoginPage() {
   const { signIn, signInWithGoogle } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,76 +30,129 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="flex items-center p-4">
+      <div className="flex items-center p-4 pt-safe-top">
         <motion.button
           whileTap={{ scale: 0.9 }}
           onClick={() => navigate(-1)}
-          className="p-2 -ml-2"
+          className="p-2 -ml-2 glass-button rounded-xl"
         >
-          <ChevronLeft className="w-6 h-6 text-text-primary" />
+          <ChevronLeft className="w-6 h-6 text-white" />
         </motion.button>
       </div>
 
       <div className="px-6 pt-4">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center">
-            <span className="text-white font-black text-2xl">H</span>
-          </div>
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary to-amber-500 flex items-center justify-center shadow-glow"
+          >
+            <span className="text-dark font-black text-3xl">H</span>
+          </motion.div>
         </div>
 
-        <h1 className="text-2xl font-black text-text-primary text-center">
-          Welcome back
-        </h1>
-        <p className="text-sm text-text-secondary text-center mt-1">
-          Sign in to your Helmies Bites account
-        </p>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+        >
+          <h1 className="text-3xl font-extrabold text-white text-center">
+            Welcome back
+          </h1>
+          <p className="text-base text-white/50 text-center mt-2">
+            Sign in to your <span className="gradient-text font-bold">Helmies Bites</span> account
+          </p>
+        </motion.div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-          <Input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email address"
-            leftIcon={<Mail className="w-4 h-4" />}
-            required
-          />
-          <Input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            leftIcon={<Lock className="w-4 h-4" />}
-            required
-          />
+        <motion.form 
+          onSubmit={handleSubmit} 
+          className="mt-8 space-y-4"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="space-y-1">
+            <label className="text-sm font-semibold text-white/70 pl-1">Email</label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="w-full glass-input rounded-xl pl-12 pr-4 py-4 text-white placeholder:text-white/30"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-semibold text-white/70 pl-1">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="w-full glass-input rounded-xl pl-12 pr-12 py-4 text-white placeholder:text-white/30"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
 
           {error && (
-            <p className="text-error text-sm text-center">{error}</p>
+            <motion.p 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-red-400 text-sm text-center bg-red-500/10 py-2 rounded-lg"
+            >
+              {error}
+            </motion.p>
           )}
 
-          <Button type="submit" fullWidth size="lg" isLoading={loading}>
-            Sign in
-          </Button>
-        </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full btn-primary rounded-xl py-4 text-base font-bold disabled:opacity-50"
+          >
+            {loading ? 'Signing in...' : 'Sign in'}
+          </button>
+        </motion.form>
 
-        <div className="relative my-6">
+        <motion.div 
+          className="relative my-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-border" />
+            <div className="w-full border-t border-white/10" />
           </div>
           <div className="relative flex justify-center">
-            <span className="bg-white px-4 text-xs text-text-tertiary">or</span>
+            <span className="bg-background px-4 text-sm text-white/40">or continue with</span>
           </div>
-        </div>
+        </motion.div>
 
-        <Button
-          variant="outline"
+        <motion.button
+          whileTap={{ scale: 0.98 }}
           onClick={() => signInWithGoogle()}
-          fullWidth
-          size="lg"
+          className="w-full glass-card rounded-xl py-4 flex items-center justify-center gap-3"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
         >
-          <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+          <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
               fill="#4285F4"
@@ -116,15 +170,20 @@ export default function LoginPage() {
               fill="#EA4335"
             />
           </svg>
-          Continue with Google
-        </Button>
+          <span className="text-white font-semibold">Continue with Google</span>
+        </motion.button>
 
-        <p className="text-center text-sm text-text-secondary mt-6 pb-8">
+        <motion.p 
+          className="text-center text-sm text-white/50 mt-8 pb-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           Don't have an account?{' '}
-          <Link to="/register" className="text-primary font-semibold">
+          <Link to="/register" className="text-primary font-bold">
             Sign up
           </Link>
-        </p>
+        </motion.p>
       </div>
     </div>
   );

@@ -45,10 +45,10 @@ export default function OnboardingPage({ onComplete }: OnboardingPageProps) {
   const slide = slides[current];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Skip button */}
       <div className="flex justify-end p-4 safe-top">
-        <button onClick={onComplete} className="text-sm font-semibold text-text-secondary dark:text-gray-400">
+        <button onClick={onComplete} className="text-sm font-semibold text-white/60">
           Skip
         </button>
       </div>
@@ -97,8 +97,8 @@ export default function OnboardingPage({ onComplete }: OnboardingPageProps) {
               ))}
             </div>
 
-            <h1 className="text-2xl font-black text-text-primary dark:text-white">{slide.title}</h1>
-            <p className="text-sm text-text-secondary dark:text-gray-400 mt-3 leading-relaxed max-w-xs">
+            <h1 className="text-2xl font-black text-white">{slide.title}</h1>
+            <p className="text-sm text-white/60 mt-3 leading-relaxed max-w-xs">
               {slide.description}
             </p>
           </motion.div>

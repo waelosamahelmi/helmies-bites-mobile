@@ -56,7 +56,7 @@ export function FeaturedCollections({ restaurants }: FeaturedCollectionsProps) {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
               onClick={() => navigate(`/search?collection=${col.id}`)}
-              className={`flex-shrink-0 w-36 h-24 rounded-2xl bg-gradient-to-br ${col.gradient} p-3 flex flex-col justify-between text-left shadow-card`}
+              className={`flex-shrink-0 w-36 h-24 rounded-2xl bg-gradient-to-br ${col.gradient} p-3 flex flex-col justify-between text-left shadow-glass`}
             >
               <span className="text-2xl">{col.emoji}</span>
               <div>

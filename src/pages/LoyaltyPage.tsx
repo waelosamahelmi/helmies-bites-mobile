@@ -86,7 +86,7 @@ export default function LoyaltyPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
+      <div className="min-h-screen bg-background">
         <BackHeader title="Loyalty Rewards" />
         <ConfettiEffect active={showConfetti} />
 
@@ -120,7 +120,7 @@ export default function LoyaltyPage() {
                     initial={{ width: 0 }}
                     animate={{ width: `${tierProgress}%` }}
                     transition={{ duration: 1, ease: 'easeOut' }}
-                    className="h-full bg-white rounded-full"
+                    className="h-full glass-card rounded-full"
                   />
                 </div>
                 <span className="text-[10px] text-white/60">
@@ -134,13 +134,13 @@ export default function LoyaltyPage() {
 
         {/* Tabs */}
         <FadeIn delay={0.1}>
-          <div className="flex bg-white dark:bg-gray-900 mt-4 border-b border-border dark:border-gray-800">
+          <div className="flex glass-card mt-4 border-b border-white/10">
             {(['rewards', 'history'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`flex-1 py-3 text-sm font-semibold border-b-2 capitalize transition-colors ${
-                  activeTab === tab ? 'border-primary text-primary' : 'border-transparent text-text-secondary dark:text-gray-400'
+                  activeTab === tab ? 'border-primary text-primary' : 'border-transparent text-white/60'
                 }`}
               >
                 {tab}
@@ -160,14 +160,14 @@ export default function LoyaltyPage() {
                   <FadeIn key={reward.id} delay={i * 0.05}>
                     <motion.div
                       whileTap={canRedeem ? { scale: 0.98 } : {}}
-                      className="bg-white dark:bg-gray-900 rounded-2xl p-4 flex items-center gap-3 shadow-card"
+                      className="glass-card rounded-2xl p-4 flex items-center gap-3 shadow-glass"
                     >
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 flex items-center justify-center flex-shrink-0">
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center flex-shrink-0">
                         <Gift className="w-7 h-7 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-bold text-text-primary dark:text-white">{reward.name_en || reward.name}</h3>
-                        <p className="text-xs text-text-secondary dark:text-gray-400">
+                        <h3 className="text-sm font-bold text-white">{reward.name_en || reward.name}</h3>
+                        <p className="text-xs text-white/60">
                           {reward.discount_type === 'percentage' ? `${reward.discount_value}% off` : `${formatPrice(reward.discount_value)} off`}
                         </p>
                         <div className="flex items-center gap-1 mt-1">
@@ -195,21 +195,21 @@ export default function LoyaltyPage() {
             ) : (
               transactions.map((tx, i) => (
                 <FadeIn key={tx.id} delay={i * 0.03}>
-                  <div className="bg-white dark:bg-gray-900 rounded-xl p-3 flex items-center gap-3 shadow-sm">
+                  <div className="glass-card rounded-xl p-3 flex items-center gap-3 shadow-sm">
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                       tx.type === 'earned' ? 'bg-success/10' : 'bg-error/10'
                     }`}>
                       {tx.type === 'earned' ? (
                         <ArrowUpRight className="w-4 h-4 text-success" />
                       ) : (
-                        <ArrowDownRight className="w-4 h-4 text-error" />
+                        <ArrowDownRight className="w-4 h-4 text-red-400" />
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-text-primary dark:text-white">{tx.description}</p>
-                      <p className="text-xs text-text-tertiary dark:text-gray-500">{format(new Date(tx.created_at), 'MMM d, yyyy')}</p>
+                      <p className="text-sm font-semibold text-white">{tx.description}</p>
+                      <p className="text-xs text-white/40">{format(new Date(tx.created_at), 'MMM d, yyyy')}</p>
                     </div>
-                    <span className={`text-sm font-bold ${tx.type === 'earned' ? 'text-success' : 'text-error'}`}>
+                    <span className={`text-sm font-bold ${tx.type === 'earned' ? 'text-success' : 'text-red-400'}`}>
                       {tx.type === 'earned' ? '+' : ''}{tx.points}
                     </span>
                   </div>

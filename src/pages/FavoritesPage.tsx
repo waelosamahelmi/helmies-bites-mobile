@@ -19,7 +19,7 @@ export default function FavoritesPage() {
   );
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
+    <div className="min-h-screen bg-background">
       <BackHeader title="Favorites" />
 
       {favRestaurants.length === 0 ? (

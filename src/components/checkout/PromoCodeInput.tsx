@@ -32,10 +32,10 @@ export function PromoCodeInput({ onApply, onRemove, appliedCode, error }: PromoC
         </div>
         <div className="flex-1">
           <p className="text-sm font-bold text-success">{appliedCode.code}</p>
-          <p className="text-xs text-text-secondary dark:text-gray-400">{appliedCode.description}</p>
+          <p className="text-xs text-white/60">{appliedCode.description}</p>
         </div>
         <button onClick={onRemove} className="p-1">
-          <X className="w-4 h-4 text-text-tertiary" />
+          <X className="w-4 h-4 text-white/40" />
         </button>
       </motion.div>
     );
@@ -65,21 +65,21 @@ export function PromoCodeInput({ onApply, onRemove, appliedCode, error }: PromoC
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 placeholder="Enter code"
-                className="flex-1 h-11 rounded-xl bg-surface-secondary dark:bg-gray-800 px-4 text-sm text-text-primary dark:text-white placeholder:text-text-tertiary uppercase focus:outline-none focus:ring-2 focus:ring-primary/30"
+                className="flex-1 h-11 rounded-xl bg-background px-4 text-sm text-white placeholder:text-white/40 uppercase focus:outline-none focus:ring-2 focus:ring-primary/30"
               />
               <button
                 onClick={handleApply}
                 disabled={!code.trim()}
                 className={cn(
                   'px-5 h-11 rounded-xl text-sm font-bold transition-colors',
-                  code.trim() ? 'bg-primary text-white' : 'bg-surface-tertiary text-text-tertiary'
+                  code.trim() ? 'bg-primary text-white' : 'bg-muted text-white/40'
                 )}
               >
                 Apply
               </button>
             </div>
             {error && (
-              <p className="text-xs text-error mt-1.5 font-medium">{error}</p>
+              <p className="text-xs text-red-400 mt-1.5 font-medium">{error}</p>
             )}
           </motion.div>
         )}

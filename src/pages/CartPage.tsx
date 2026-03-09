@@ -64,7 +64,7 @@ export default function CartPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary">
+      <div className="min-h-screen bg-background">
         <Header title="Your Cart" showBack />
 
         <div className="pt-header pb-40">
@@ -72,13 +72,13 @@ export default function CartPage() {
             // Empty state
             <FadeIn>
               <div className="flex flex-col items-center justify-center px-8 py-20">
-                <div className="w-24 h-24 rounded-full bg-surface-tertiary flex items-center justify-center mb-6">
-                  <ShoppingBag className="w-12 h-12 text-text-tertiary" />
+                <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center mb-6">
+                  <ShoppingBag className="w-12 h-12 text-white/40" />
                 </div>
-                <h2 className="text-xl font-bold text-text-primary mb-2">
+                <h2 className="text-xl font-bold text-white mb-2">
                   Your cart is empty
                 </h2>
-                <p className="text-text-secondary text-center mb-6">
+                <p className="text-white/60 text-center mb-6">
                   Add some delicious dishes to get started
                 </p>
                 <Button onClick={() => navigate('/')}>
@@ -89,13 +89,13 @@ export default function CartPage() {
           ) : (
             <>
               {/* Clear cart header */}
-              <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-border">
-                <span className="text-sm text-text-secondary">
+              <div className="flex items-center justify-between px-4 py-3 glass-card border-b border-white/10">
+                <span className="text-sm text-white/60">
                   {items.length} {items.length === 1 ? 'item' : 'items'}
                 </span>
                 <button
                   onClick={handleClearCart}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-error hover:bg-error/5 rounded-lg transition-colors"
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-red-400 hover:bg-error/5 rounded-lg transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                   Clear Cart
@@ -113,10 +113,10 @@ export default function CartPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, x: -100, scale: 0.9 }}
                       transition={{ delay: index * 0.05 }}
-                      className="flex gap-4 p-4 bg-white rounded-xl shadow-card"
+                      className="flex gap-4 p-4 glass-card rounded-xl shadow-glass"
                     >
                       {/* Image */}
-                      <div className="w-20 h-20 rounded-lg bg-surface-tertiary flex-shrink-0 overflow-hidden">
+                      <div className="w-20 h-20 rounded-lg bg-muted flex-shrink-0 overflow-hidden">
                         {item.menuItem.image_url ? (
                           <img
                             src={item.menuItem.image_url}
@@ -133,11 +133,11 @@ export default function CartPage() {
                       {/* Details */}
                       <div className="flex-1 flex flex-col justify-between min-w-0">
                         <div>
-                          <h3 className="font-semibold text-sm text-text-primary line-clamp-1">
+                          <h3 className="font-semibold text-sm text-white line-clamp-1">
                             {item.menuItem.name}
                           </h3>
                           {item.specialInstructions && (
-                            <p className="text-xs text-text-secondary mt-0.5 line-clamp-1">
+                            <p className="text-xs text-white/60 mt-0.5 line-clamp-1">
                               Note: {item.specialInstructions}
                             </p>
                           )}
@@ -167,16 +167,16 @@ export default function CartPage() {
 
               {/* Promo code section */}
               <div className="px-4 py-4">
-                <div className="bg-white rounded-xl p-4 shadow-card">
+                <div className="glass-card rounded-xl p-4 shadow-glass">
                   <div className="flex items-center gap-2 mb-3">
                     <Ticket className="w-5 h-5 text-primary" />
-                    <span className="font-semibold text-text-primary">
+                    <span className="font-semibold text-white">
                       Promo Code
                     </span>
                   </div>
 
                   {promoCode ? (
-                    <div className="flex items-center justify-between p-3 bg-primary-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-primary/20 rounded-lg">
                       <div>
                         <span className="font-bold text-primary">
                           {promoCode}
@@ -187,7 +187,7 @@ export default function CartPage() {
                       </div>
                       <button
                         onClick={clearPromoCode}
-                        className="text-sm text-error font-medium"
+                        className="text-sm text-red-400 font-medium"
                       >
                         Remove
                       </button>
@@ -220,13 +220,13 @@ export default function CartPage() {
           <motion.div
             initial={{ y: 100 }}
             animate={{ y: 0 }}
-            className="fixed bottom-0 left-0 right-0 bg-white border-t border-border px-4 py-4 pb-safe-bottom shadow-sheet max-w-lg mx-auto"
+            className="fixed bottom-0 left-0 right-0 glass-card border-t border-white/10 px-4 py-4 pb-safe-bottom shadow-sheet max-w-lg mx-auto"
           >
             {/* Price breakdown */}
             <div className="space-y-2 mb-4">
               <div className="flex justify-between text-sm">
-                <span className="text-text-secondary">Subtotal</span>
-                <span className="text-text-primary">€{subtotal.toFixed(2)}</span>
+                <span className="text-white/60">Subtotal</span>
+                <span className="text-white">€{subtotal.toFixed(2)}</span>
               </div>
               {discountAmount > 0 && (
                 <div className="flex justify-between text-sm">
@@ -235,12 +235,12 @@ export default function CartPage() {
                 </div>
               )}
               <div className="flex justify-between text-sm">
-                <span className="text-text-secondary">Delivery</span>
-                <span className="text-text-primary">€{deliveryFee.toFixed(2)}</span>
+                <span className="text-white/60">Delivery</span>
+                <span className="text-white">€{deliveryFee.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between pt-2 border-t border-border">
-                <span className="font-bold text-text-primary">Total</span>
-                <span className="font-bold text-lg text-text-primary">
+              <div className="flex justify-between pt-2 border-t border-white/10">
+                <span className="font-bold text-white">Total</span>
+                <span className="font-bold text-lg text-white">
                   €{total.toFixed(2)}
                 </span>
               </div>

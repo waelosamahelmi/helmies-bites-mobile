@@ -12,7 +12,7 @@ export function OfflineBanner() {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="bg-text-primary dark:bg-gray-700 overflow-hidden"
+          className="bg-text-primary overflow-hidden"
         >
           <div className="flex items-center justify-center gap-2 py-2 px-4">
             <WifiOff className="w-3.5 h-3.5 text-white" />

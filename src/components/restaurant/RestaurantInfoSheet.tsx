@@ -47,21 +47,21 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 rounded-t-3xl max-h-[80vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-50 glass-card rounded-t-3xl max-h-[80vh] overflow-y-auto"
           >
             <div className="px-4 py-4">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-black text-text-primary dark:text-white">
+                  <h2 className="text-xl font-black text-white">
                     {tenant.name_en || tenant.name}
                   </h2>
-                  <p className="text-sm text-text-secondary dark:text-gray-400 mt-0.5">
+                  <p className="text-sm text-white/60 mt-0.5">
                     {restaurant.cuisineType || 'Restaurant'}
                   </p>
                 </div>
                 <button onClick={onClose} className="p-1">
-                  <X className="w-5 h-5 text-text-secondary" />
+                  <X className="w-5 h-5 text-white/60" />
                 </button>
               </div>
 
@@ -69,9 +69,9 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
               <div className="flex items-center gap-3 mb-5">
                 <div className="flex items-center gap-1.5">
                   <RatingStars rating={rating} size="sm" />
-                  <span className="text-sm font-bold text-text-primary dark:text-white">{rating.toFixed(1)}</span>
+                  <span className="text-sm font-bold text-white">{rating.toFixed(1)}</span>
                 </div>
-                <span className="text-xs text-text-tertiary">(120+ ratings)</span>
+                <span className="text-xs text-white/40">(120+ ratings)</span>
               </div>
 
               {/* Info rows */}
@@ -82,8 +82,8 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
                     <MapPin className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-text-primary dark:text-white">Address</p>
-                    <p className="text-sm text-text-secondary dark:text-gray-400">
+                    <p className="text-sm font-semibold text-white">Address</p>
+                    <p className="text-sm text-white/60">
                       {branch.address}, {branch.postal_code} {branch.city}
                     </p>
                     <p className="text-xs text-primary mt-0.5">{formatDistance(distance)} away</p>
@@ -97,7 +97,7 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
                       <Phone className="w-5 h-5 text-success" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-text-primary dark:text-white">Phone</p>
+                      <p className="text-sm font-semibold text-white">Phone</p>
                       <a href={`tel:${branch.phone}`} className="text-sm text-primary">{branch.phone}</a>
                     </div>
                   </div>
@@ -109,7 +109,7 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
                     <Clock className="w-5 h-5 text-info" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-text-primary dark:text-white mb-2">Opening hours</p>
+                    <p className="text-sm font-semibold text-white mb-2">Opening hours</p>
                     <div className="space-y-1.5">
                       {dayNames.map((day, i) => {
                         const key = dayKeys[(i + 1) % 7];
@@ -117,7 +117,7 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
                         const isToday = (i + 1) % 7 === todayIndex;
                         return (
                           <div key={day} className={`flex justify-between text-sm ${
-                            isToday ? 'font-bold text-primary' : 'text-text-secondary dark:text-gray-400'
+                            isToday ? 'font-bold text-primary' : 'text-white/60'
                           }`}>
                             <span>{day}</span>
                             <span>{hours}</span>
@@ -135,8 +135,8 @@ export function RestaurantInfoSheet({ restaurant, open, onClose }: RestaurantInf
                       <Info className="w-5 h-5 text-warning" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-text-primary dark:text-white">About</p>
-                      <p className="text-sm text-text-secondary dark:text-gray-400">
+                      <p className="text-sm font-semibold text-white">About</p>
+                      <p className="text-sm text-white/60">
                         {tenant.description_en || tenant.description}
                       </p>
                     </div>

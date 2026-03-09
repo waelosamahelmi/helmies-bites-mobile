@@ -36,7 +36,7 @@ export function TipSelector({ subtotal, onTipChange }: TipSelectorProps) {
     <div>
       <div className="flex items-center gap-2 mb-3">
         <Heart className="w-5 h-5 text-primary" />
-        <h3 className="text-sm font-bold text-text-primary dark:text-white">Add a tip for your driver</h3>
+        <h3 className="text-sm font-bold text-white">Add a tip for your driver</h3>
       </div>
 
       <div className="grid grid-cols-4 gap-2 mb-3">
@@ -49,7 +49,7 @@ export function TipSelector({ subtotal, onTipChange }: TipSelectorProps) {
               'py-2.5 rounded-xl text-center transition-all',
               selectedTip === opt.value
                 ? 'bg-primary text-white shadow-float'
-                : 'bg-surface-secondary dark:bg-gray-800 text-text-secondary dark:text-gray-400'
+                : 'bg-background text-white/60'
             )}
           >
             <p className="text-xs font-bold">{opt.label}</p>
@@ -61,7 +61,7 @@ export function TipSelector({ subtotal, onTipChange }: TipSelectorProps) {
       </div>
 
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-text-tertiary">EUR</span>
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-white/40">EUR</span>
         <input
           type="number"
           value={customTip}
@@ -69,7 +69,7 @@ export function TipSelector({ subtotal, onTipChange }: TipSelectorProps) {
           placeholder="Custom amount"
           min="0"
           step="0.50"
-          className="w-full h-11 rounded-xl bg-surface-secondary dark:bg-gray-800 pl-12 pr-4 text-sm text-text-primary dark:text-white placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/30"
+          className="w-full h-11 rounded-xl bg-background pl-12 pr-4 text-sm text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-primary/30"
         />
       </div>
     </div>

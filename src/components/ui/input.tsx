@@ -31,13 +31,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn('w-full', containerClassName)}>
         {label && (
-          <label className="block text-sm font-medium text-text-primary mb-2">
+          <label className="block text-sm font-medium text-white mb-2">
             {label}
           </label>
         )}
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-text-secondary">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/60">
               {leftIcon}
             </div>
           )}
@@ -46,8 +46,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             type={inputType}
             className={cn(
               'w-full h-12 px-4 text-sm rounded-lg transition-all duration-200',
-              'bg-surface-tertiary border border-border',
-              'text-text-primary placeholder:text-text-secondary',
+              'bg-muted border border-white/10',
+              'text-white placeholder:text-white/60',
               'focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               leftIcon && 'pl-12',
@@ -61,7 +61,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary hover:text-text-primary"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
             >
               {showPassword ? (
                 <EyeOff className="w-5 h-5" />
@@ -71,13 +71,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             </button>
           )}
           {!isPassword && rightIcon && (
-            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-text-secondary">
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/60">
               {rightIcon}
             </div>
           )}
         </div>
         {error && (
-          <p className="mt-1.5 text-xs text-error">{error}</p>
+          <p className="mt-1.5 text-xs text-red-400">{error}</p>
         )}
       </div>
     );
@@ -98,7 +98,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className={cn('w-full', containerClassName)}>
         {label && (
-          <label className="block text-sm font-medium text-text-primary mb-2">
+          <label className="block text-sm font-medium text-white mb-2">
             {label}
           </label>
         )}
@@ -106,15 +106,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           className={cn(
             'w-full min-h-[100px] px-4 py-3 text-sm rounded-lg transition-all duration-200',
-            'bg-surface-tertiary border border-border resize-none',
-            'text-text-primary placeholder:text-text-secondary',
+            'bg-muted border border-white/10 resize-none',
+            'text-white placeholder:text-white/60',
             'focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20',
             error && 'border-error focus:border-error focus:ring-error/20',
             className
           )}
           {...props}
         />
-        {error && <p className="mt-1.5 text-xs text-error">{error}</p>}
+        {error && <p className="mt-1.5 text-xs text-red-400">{error}</p>}
       </div>
     );
   }

@@ -52,46 +52,46 @@ export default function AddressesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-secondary">
+    <div className="min-h-screen bg-background">
       <BackHeader title="Addresses" />
 
       {/* Current location */}
-      <div className="bg-white mt-2">
+      <div className="glass-card mt-2">
         <button
           onClick={requestLocation}
-          className="w-full flex items-center gap-3 px-4 py-4 hover:bg-surface-secondary transition-colors"
+          className="w-full flex items-center gap-3 px-4 py-4 hover:bg-background transition-colors"
         >
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Navigation className="w-5 h-5 text-primary" />
           </div>
           <div className="text-left">
-            <p className="text-sm font-bold text-text-primary">Use current location</p>
-            <p className="text-xs text-text-secondary">GPS-based delivery</p>
+            <p className="text-sm font-bold text-white">Use current location</p>
+            <p className="text-xs text-white/60">GPS-based delivery</p>
           </div>
         </button>
       </div>
 
       {/* Saved addresses */}
-      <div className="bg-white mt-2">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-          <h3 className="text-sm font-bold text-text-primary">Saved addresses</h3>
+      <div className="glass-card mt-2">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+          <h3 className="text-sm font-bold text-white">Saved addresses</h3>
           <button onClick={() => setShowAdd(true)} className="text-primary">
             <Plus className="w-5 h-5" />
           </button>
         </div>
         {addresses.length === 0 ? (
-          <p className="text-sm text-text-secondary text-center py-8">No saved addresses</p>
+          <p className="text-sm text-white/60 text-center py-8">No saved addresses</p>
         ) : (
           addresses.map(addr => (
-            <div key={addr.id} className="flex items-center gap-3 px-4 py-3 border-b border-border">
+            <div key={addr.id} className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
               <button onClick={() => selectAddress(addr)} className="flex items-center gap-3 flex-1 text-left">
-                <MapPin className="w-4 h-4 text-text-secondary flex-shrink-0" />
+                <MapPin className="w-4 h-4 text-white/60 flex-shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold text-text-primary">{addr.label}</p>
-                  <p className="text-xs text-text-secondary">{addr.address}</p>
+                  <p className="text-sm font-semibold text-white">{addr.label}</p>
+                  <p className="text-xs text-white/60">{addr.address}</p>
                 </div>
               </button>
-              <button onClick={() => removeAddress(addr.id)} className="text-error">
+              <button onClick={() => removeAddress(addr.id)} className="text-red-400">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
@@ -101,8 +101,8 @@ export default function AddressesPage() {
 
       {/* Add address modal */}
       {showAdd && (
-        <div className="bg-white mt-2 p-4 space-y-3">
-          <h3 className="text-sm font-bold text-text-primary">Add new address</h3>
+        <div className="glass-card mt-2 p-4 space-y-3">
+          <h3 className="text-sm font-bold text-white">Add new address</h3>
           <Input value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="Label (e.g. Home, Work)" />
           <Input value={newAddress} onChange={e => setNewAddress(e.target.value)} placeholder="Full address" />
           <div className="flex gap-2">
