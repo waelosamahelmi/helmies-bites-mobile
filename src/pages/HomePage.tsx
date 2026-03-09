@@ -91,18 +91,9 @@ export default function HomePage() {
         {/* Content */}
         <div className="pt-32">
           <PullToRefresh onRefresh={handleRefresh}>
-            {/* Category tabs */}
-            <div className="bg-background/80 backdrop-blur-xl sticky top-32 z-40 border-b border-white/5">
-              <CategoryTabs
-                categories={categories}
-                activeCategory={activeCategory}
-                onSelect={setActiveCategory}
-              />
-            </div>
-
-            {/* Promo banner */}
+            {/* Promo banner - comes first, before sticky tabs */}
             <FadeIn delay={0.1}>
-              <div className="px-4 py-4">
+              <div className="px-4 pt-4 pb-2">
                 <motion.div
                   whileTap={{ scale: 0.98 }}
                   className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary via-amber-500 to-primary p-5"
@@ -131,6 +122,15 @@ export default function HomePage() {
                 </motion.div>
               </div>
             </FadeIn>
+
+            {/* Category tabs - sticky after promo */}
+            <div className="bg-background sticky top-[88px] z-40 border-b border-white/5">
+              <CategoryTabs
+                categories={categories}
+                activeCategory={activeCategory}
+                onSelect={setActiveCategory}
+              />
+            </div>
 
             {/* Popular items */}
             {popularItems.length > 0 && (
