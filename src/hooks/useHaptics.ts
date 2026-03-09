@@ -20,6 +20,18 @@ export function useHaptics() {
     }
   }, []);
 
+  const impactLight = useCallback(async () => {
+    await impact('light');
+  }, [impact]);
+
+  const impactMedium = useCallback(async () => {
+    await impact('medium');
+  }, [impact]);
+
+  const impactHeavy = useCallback(async () => {
+    await impact('heavy');
+  }, [impact]);
+
   const notification = useCallback(async (type: 'success' | 'warning' | 'error' = 'success') => {
     try {
       const { Haptics, NotificationType } = await import('@capacitor/haptics');
@@ -41,5 +53,5 @@ export function useHaptics() {
     } catch { /* ignore */ }
   }, []);
 
-  return { impact, notification, selectionChanged };
+  return { impact, impactLight, impactMedium, impactHeavy, notification, selectionChanged };
 }

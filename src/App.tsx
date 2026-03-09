@@ -3,32 +3,32 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { LocationProvider } from '@/contexts/LocationContext';
-import { CartProvider } from '@/contexts/CartContext';
-import { ToastProvider } from '@/contexts/ToastContext';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { useOnboarding } from '@/hooks/useOnboarding';
 
 // Pages
 import OnboardingPage from '@/pages/OnboardingPage';
-import DiscoveryPage from '@/pages/DiscoveryPage';
+import HomePage from '@/pages/HomePage';
 import SearchPage from '@/pages/SearchPage';
 import RestaurantPage from '@/pages/RestaurantPage';
+import DishDetailPage from '@/pages/DishDetailPage';
 import CartPage from '@/pages/CartPage';
 import CheckoutPage from '@/pages/CheckoutPage';
 import OrdersPage from '@/pages/OrdersPage';
 import OrderDetailPage from '@/pages/OrderDetailPage';
 import AccountPage from '@/pages/AccountPage';
-import LoginPage from '@/pages/LoginPage';
-import RegisterPage from '@/pages/RegisterPage';
-import LoyaltyPage from '@/pages/LoyaltyPage';
-import FavoritesPage from '@/pages/FavoritesPage';
 import ProfilePage from '@/pages/ProfilePage';
+import WishlistPage from '@/pages/WishlistPage';
+import FavoritesPage from '@/pages/FavoritesPage';
+import LoyaltyPage from '@/pages/LoyaltyPage';
 import AddressesPage from '@/pages/AddressesPage';
 import NotificationsPage from '@/pages/NotificationsPage';
 import ReferralPage from '@/pages/ReferralPage';
 import SettingsPage from '@/pages/SettingsPage';
 import SupportPage from '@/pages/SupportPage';
 import WriteReviewPage from '@/pages/WriteReviewPage';
+import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -55,15 +55,17 @@ function AppContent() {
 
         {/* Main app with bottom nav */}
         <Route element={<AppLayout />}>
-          <Route path="/" element={<DiscoveryPage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/restaurant/:slug" element={<RestaurantPage />} />
+          <Route path="/dish/:id" element={<DishDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/loyalty" element={<LoyaltyPage />} />
           <Route path="/addresses" element={<AddressesPage />} />
@@ -83,15 +85,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <ToastProvider>
-          <AuthProvider>
-            <LocationProvider>
-              <CartProvider>
-                <AppContent />
-              </CartProvider>
-            </LocationProvider>
-          </AuthProvider>
-        </ToastProvider>
+        <AuthProvider>
+          <LocationProvider>
+            <AppContent />
+          </LocationProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

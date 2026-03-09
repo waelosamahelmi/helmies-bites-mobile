@@ -1,262 +1,393 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, CreditCard, MessageSquare } from 'lucide-react';
-import { BackHeader } from '@/components/layout/BackHeader';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  MapPin,
+  Clock,
+  CreditCard,
+  Wallet,
+  ChevronRight,
+  ChevronDown,
+  Check,
+  AlertCircle,
+  Phone,
+  User,
+  Mail,
+} from 'lucide-react';
+import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { TipSelector } from '@/components/checkout/TipSelector';
-import { DeliveryTimePicker } from '@/components/checkout/DeliveryTimePicker';
-import { PromoCodeInput } from '@/components/checkout/PromoCodeInput';
-import { ConfettiEffect } from '@/components/ui/confetti';
+import { Input, Textarea } from '@/components/ui/input';
 import { PageTransition, FadeIn } from '@/components/ui/page-transition';
-import { useCart } from '@/contexts/CartContext';
-import { useAuth } from '@/contexts/AuthContext';
+import { useCartStore } from '@/stores';
 import { useLocation } from '@/contexts/LocationContext';
-import { useToast } from '@/contexts/ToastContext';
 import { useHaptics } from '@/hooks/useHaptics';
-import { usePromoCode } from '@/hooks/usePromoCode';
-import { createOrder, createPaymentIntent } from '@/lib/api';
-import { formatPrice } from '@/lib/utils';
+import { useToast } from '@/components/ui/toast';
+import { cn } from '@/lib/utils';
+
+type PaymentMethod = 'card' | 'cash' | 'apple_pay' | 'google_pay';
+type DeliveryTime = 'asap' | 'scheduled';
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
-  const { items, subtotal, deliveryFee, total, restaurantId, clearCart } = useCart();
-  const { user } = useAuth();
-  const { address } = useLocation();
-  const toast = useToast();
   const haptics = useHaptics();
-  const { appliedCode, error: promoError, applyCode, removeCode, calculateDiscount } = usePromoCode();
+  const toast = useToast();
+  const { address, city } = useLocation();
 
+  const {
+    items,
+    subtotal,
+    deliveryFee,
+    discountAmount,
+    total,
+    clearCart,
+  } = useCartStore();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deliveryTime, setDeliveryTime] = useState<DeliveryTime>('asap');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('card');
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [instructions, setInstructions] = useState('');
+
+  // Customer details
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState(address || '');
-  const [deliveryInstructions, setDeliveryInstructions] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'cash'>('stripe');
-  const [tip, setTip] = useState(0);
-  const [scheduledTime, setScheduledTime] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [formError, setFormError] = useState('');
-  const [showConfetti, setShowConfetti] = useState(false);
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-white dark:bg-gray-950">
-        <BackHeader title="Checkout" />
-        <div className="p-8 text-center">
-          <h2 className="text-lg font-bold dark:text-white mb-2">Sign in to continue</h2>
-          <p className="text-sm text-text-secondary dark:text-gray-400 mb-4">You need to be signed in to place an order</p>
-          <Button onClick={() => navigate('/login')}>Sign in</Button>
-        </div>
-      </div>
-    );
-  }
-
-  const discount = calculateDiscount(subtotal);
-  const finalTotal = total - discount + tip;
-
-  const handlePlaceOrder = async () => {
-    if (!deliveryAddress.trim()) {
-      setFormError('Please enter a delivery address');
+  const handleSubmitOrder = async () => {
+    if (!customerName || !customerPhone || !deliveryAddress) {
+      toast.error('Please fill in all required fields');
       return;
     }
 
+    setIsSubmitting(true);
+    haptics.impactMedium();
+
     try {
-      setLoading(true);
-      setFormError('');
+      // Simulate order submission
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const orderData = {
-        customer_id: user.id,
-        items: items.map(({ menuItem, quantity, specialInstructions }) => ({
-          menu_item_id: menuItem.id,
-          name: menuItem.name,
-          quantity,
-          price: menuItem.price,
-          special_instructions: specialInstructions,
-        })),
-        subtotal,
-        delivery_fee: deliveryFee,
-        tax_amount: 0,
-        total_amount: finalTotal,
-        payment_method: paymentMethod,
-        delivery_address: { street: deliveryAddress, city: 'Helsinki', postal_code: '00100' },
-        delivery_instructions: deliveryInstructions || undefined,
-        scheduled_for: scheduledTime || undefined,
-        tip_amount: tip,
-        promo_code: appliedCode?.code,
-        discount_amount: discount,
-      };
-
-      const order = await createOrder(restaurantId!, orderData);
-
-      if (paymentMethod === 'stripe') {
-        await createPaymentIntent(restaurantId!, finalTotal, order.id);
-      }
-
-      haptics.notification('success');
-      setShowConfetti(true);
-      toast.success('Order placed successfully!');
+      // Clear cart and navigate to success
       clearCart();
-
-      setTimeout(() => {
-        navigate(`/orders/${order.id}`, { replace: true });
-      }, 1500);
-    } catch (err: any) {
-      setFormError(err.message || 'Failed to place order');
-      haptics.notification('error');
+      navigate('/orders', {
+        state: { orderSuccess: true, orderId: 'ORD-' + Date.now() },
+      });
+      toast.success('Order placed successfully!');
+    } catch (error) {
+      toast.error('Failed to place order. Please try again.');
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
+  if (items.length === 0) {
+    navigate('/cart');
+    return null;
+  }
+
   return (
     <PageTransition>
-      <div className="min-h-screen bg-surface-secondary dark:bg-gray-950">
-        <BackHeader title="Checkout" />
-        <ConfettiEffect active={showConfetti} />
+      <div className="min-h-screen bg-surface-secondary pb-40">
+        <Header title="Checkout" showBack />
 
-        {/* Delivery address */}
-        <FadeIn delay={0.05}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <MapPin className="w-5 h-5 text-primary" />
-              <h3 className="text-sm font-bold text-text-primary dark:text-white">Delivery address</h3>
+        <div className="pt-header">
+          {/* Customer Details */}
+          <FadeIn>
+            <div className="bg-white p-4 mb-2">
+              <h2 className="font-semibold text-text-primary mb-4">
+                Contact Details
+              </h2>
+              <div className="space-y-3">
+                <Input
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  placeholder="Full name"
+                  leftIcon={<User className="w-5 h-5" />}
+                />
+                <Input
+                  value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)}
+                  placeholder="Phone number"
+                  type="tel"
+                  leftIcon={<Phone className="w-5 h-5" />}
+                />
+                <Input
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  placeholder="Email (optional)"
+                  type="email"
+                  leftIcon={<Mail className="w-5 h-5" />}
+                />
+              </div>
             </div>
-            <Input
-              value={deliveryAddress}
-              onChange={(e) => setDeliveryAddress(e.target.value)}
-              placeholder="Enter your delivery address"
-            />
-          </div>
-        </FadeIn>
+          </FadeIn>
 
-        {/* Delivery time */}
-        <FadeIn delay={0.1}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <DeliveryTimePicker onTimeChange={setScheduledTime} />
-          </div>
-        </FadeIn>
-
-        {/* Delivery instructions */}
-        <FadeIn delay={0.15}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <MessageSquare className="w-5 h-5 text-primary" />
-              <h3 className="text-sm font-bold text-text-primary dark:text-white">Delivery instructions</h3>
-            </div>
-            <textarea
-              value={deliveryInstructions}
-              onChange={(e) => setDeliveryInstructions(e.target.value)}
-              placeholder="e.g. Ring doorbell, leave at door..."
-              className="w-full h-20 rounded-xl bg-surface-secondary dark:bg-gray-800 px-4 py-3 text-sm text-text-primary dark:text-white placeholder:text-text-tertiary resize-none focus:outline-none focus:ring-2 focus:ring-primary/30 border border-transparent focus:border-primary"
-            />
-          </div>
-        </FadeIn>
-
-        {/* Payment method */}
-        <FadeIn delay={0.2}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <CreditCard className="w-5 h-5 text-primary" />
-              <h3 className="text-sm font-bold text-text-primary dark:text-white">Payment method</h3>
-            </div>
-            <div className="space-y-2">
-              {[
-                { value: 'stripe' as const, label: 'Credit / Debit card', desc: 'Pay securely with Stripe' },
-                { value: 'cash' as const, label: 'Cash on delivery', desc: 'Pay when you receive your order' },
-              ].map(pm => (
+          {/* Delivery Address */}
+          <FadeIn delay={0.1}>
+            <div className="bg-white p-4 mb-2">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-semibold text-text-primary">
+                  Delivery Address
+                </h2>
                 <button
-                  key={pm.value}
-                  onClick={() => setPaymentMethod(pm.value)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
-                    paymentMethod === pm.value
-                      ? 'border-primary bg-primary/5 dark:bg-primary/10'
-                      : 'border-border dark:border-gray-700 hover:border-border-strong'
-                  }`}
+                  onClick={() => setShowAddressForm(!showAddressForm)}
+                  className="text-primary text-sm font-medium"
                 >
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                    paymentMethod === pm.value ? 'border-primary' : 'border-border-strong dark:border-gray-600'
-                  }`}>
-                    {paymentMethod === pm.value && <div className="w-2.5 h-2.5 rounded-full bg-primary" />}
-                  </div>
+                  {showAddressForm ? 'Cancel' : 'Change'}
+                </button>
+              </div>
+
+              <AnimatePresence mode="wait">
+                {showAddressForm ? (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-3"
+                  >
+                    <Textarea
+                      value={deliveryAddress}
+                      onChange={(e) => setDeliveryAddress(e.target.value)}
+                      placeholder="Enter your delivery address"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="display"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                      <MapPin className="w-5 h-5 text-primary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-text-primary">
+                        {city || 'Delivery Address'}
+                      </p>
+                      <p className="text-sm text-text-secondary truncate">
+                        {deliveryAddress || 'Please add your address'}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </FadeIn>
+
+          {/* Delivery Time */}
+          <FadeIn delay={0.15}>
+            <div className="bg-white p-4 mb-2">
+              <h2 className="font-semibold text-text-primary mb-4">
+                Delivery Time
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setDeliveryTime('asap')}
+                  className={cn(
+                    'flex items-center gap-2 p-3 rounded-xl border-2 transition-all',
+                    deliveryTime === 'asap'
+                      ? 'border-primary bg-primary-50'
+                      : 'border-border'
+                  )}
+                >
+                  <Clock
+                    className={cn(
+                      'w-5 h-5',
+                      deliveryTime === 'asap'
+                        ? 'text-primary'
+                        : 'text-text-secondary'
+                    )}
+                  />
                   <div className="text-left">
-                    <p className="text-sm font-semibold text-text-primary dark:text-white">{pm.label}</p>
-                    <p className="text-xs text-text-secondary dark:text-gray-400">{pm.desc}</p>
+                    <p
+                      className={cn(
+                        'font-medium text-sm',
+                        deliveryTime === 'asap'
+                          ? 'text-primary'
+                          : 'text-text-primary'
+                      )}
+                    >
+                      ASAP
+                    </p>
+                    <p className="text-xs text-text-secondary">25-35 min</p>
                   </div>
                 </button>
-              ))}
+
+                <button
+                  onClick={() => setDeliveryTime('scheduled')}
+                  className={cn(
+                    'flex items-center gap-2 p-3 rounded-xl border-2 transition-all',
+                    deliveryTime === 'scheduled'
+                      ? 'border-primary bg-primary-50'
+                      : 'border-border'
+                  )}
+                >
+                  <Clock
+                    className={cn(
+                      'w-5 h-5',
+                      deliveryTime === 'scheduled'
+                        ? 'text-primary'
+                        : 'text-text-secondary'
+                    )}
+                  />
+                  <div className="text-left">
+                    <p
+                      className={cn(
+                        'font-medium text-sm',
+                        deliveryTime === 'scheduled'
+                          ? 'text-primary'
+                          : 'text-text-primary'
+                      )}
+                    >
+                      Schedule
+                    </p>
+                    <p className="text-xs text-text-secondary">Pick time</p>
+                  </div>
+                </button>
+              </div>
             </div>
-          </div>
-        </FadeIn>
+          </FadeIn>
 
-        {/* Tip */}
-        <FadeIn delay={0.25}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <TipSelector subtotal={subtotal} onTipChange={setTip} />
-          </div>
-        </FadeIn>
+          {/* Payment Method */}
+          <FadeIn delay={0.2}>
+            <div className="bg-white p-4 mb-2">
+              <h2 className="font-semibold text-text-primary mb-4">
+                Payment Method
+              </h2>
+              <div className="space-y-2">
+                {[
+                  { id: 'card', label: 'Credit/Debit Card', icon: CreditCard },
+                  { id: 'cash', label: 'Cash on Delivery', icon: Wallet },
+                ].map((method) => (
+                  <button
+                    key={method.id}
+                    onClick={() => setPaymentMethod(method.id as PaymentMethod)}
+                    className={cn(
+                      'flex items-center justify-between w-full p-4 rounded-xl border-2 transition-all',
+                      paymentMethod === method.id
+                        ? 'border-primary bg-primary-50'
+                        : 'border-border'
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <method.icon
+                        className={cn(
+                          'w-5 h-5',
+                          paymentMethod === method.id
+                            ? 'text-primary'
+                            : 'text-text-secondary'
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          'font-medium',
+                          paymentMethod === method.id
+                            ? 'text-primary'
+                            : 'text-text-primary'
+                        )}
+                      >
+                        {method.label}
+                      </span>
+                    </div>
+                    {paymentMethod === method.id && (
+                      <Check className="w-5 h-5 text-primary" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </FadeIn>
 
-        {/* Promo code */}
-        <FadeIn delay={0.3}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <PromoCodeInput
-              onApply={(code) => applyCode(code, subtotal)}
-              onRemove={removeCode}
-              appliedCode={appliedCode}
-              error={promoError}
-            />
-          </div>
-        </FadeIn>
+          {/* Delivery Instructions */}
+          <FadeIn delay={0.25}>
+            <div className="bg-white p-4 mb-2">
+              <h2 className="font-semibold text-text-primary mb-3">
+                Delivery Instructions (Optional)
+              </h2>
+              <Textarea
+                value={instructions}
+                onChange={(e) => setInstructions(e.target.value)}
+                placeholder="E.g., Ring the doorbell, leave at door..."
+              />
+            </div>
+          </FadeIn>
 
-        {/* Order summary */}
-        <FadeIn delay={0.35}>
-          <div className="bg-white dark:bg-gray-900 mt-2 p-4">
-            <h3 className="text-sm font-bold text-text-primary dark:text-white mb-3">Order summary</h3>
-            <div className="space-y-1.5">
-              {items.map(({ menuItem, quantity }) => (
-                <div key={menuItem.id} className="flex justify-between text-sm">
-                  <span className="text-text-secondary dark:text-gray-400">{quantity}x {menuItem.name_en || menuItem.name}</span>
-                  <span className="font-semibold dark:text-white">{formatPrice(menuItem.price * quantity)}</span>
-                </div>
-              ))}
-              <div className="border-t border-border dark:border-gray-800 pt-2 mt-2 space-y-1.5">
+          {/* Order Summary */}
+          <FadeIn delay={0.3}>
+            <div className="bg-white p-4">
+              <h2 className="font-semibold text-text-primary mb-4">
+                Order Summary
+              </h2>
+
+              {/* Items */}
+              <div className="space-y-2 mb-4">
+                {items.map((item) => (
+                  <div
+                    key={item.menuItem.id}
+                    className="flex justify-between text-sm"
+                  >
+                    <span className="text-text-secondary">
+                      {item.quantity}x {item.menuItem.name}
+                    </span>
+                    <span className="text-text-primary">
+                      €{(item.menuItem.price * item.quantity).toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="border-t border-border pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary dark:text-gray-400">Subtotal</span>
-                  <span className="font-semibold dark:text-white">{formatPrice(subtotal)}</span>
+                  <span className="text-text-secondary">Subtotal</span>
+                  <span className="text-text-primary">
+                    €{subtotal.toFixed(2)}
+                  </span>
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-text-secondary dark:text-gray-400">Delivery fee</span>
-                  <span className="font-semibold dark:text-white">{formatPrice(deliveryFee)}</span>
-                </div>
-                {discount > 0 && (
+                {discountAmount > 0 && (
                   <div className="flex justify-between text-sm">
-                    <span className="text-success font-semibold">Discount ({appliedCode?.code})</span>
-                    <span className="text-success font-semibold">-{formatPrice(discount)}</span>
+                    <span className="text-primary">Discount</span>
+                    <span className="text-primary">
+                      -€{discountAmount.toFixed(2)}
+                    </span>
                   </div>
                 )}
-                {tip > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-text-secondary dark:text-gray-400">Driver tip</span>
-                    <span className="font-semibold dark:text-white">{formatPrice(tip)}</span>
-                  </div>
-                )}
-                <div className="border-t border-border dark:border-gray-800 pt-2 flex justify-between">
-                  <span className="font-bold dark:text-white">Total</span>
-                  <span className="font-black text-primary text-lg">{formatPrice(finalTotal)}</span>
+                <div className="flex justify-between text-sm">
+                  <span className="text-text-secondary">Delivery Fee</span>
+                  <span className="text-text-primary">
+                    €{deliveryFee.toFixed(2)}
+                  </span>
                 </div>
               </div>
             </div>
-          </div>
-        </FadeIn>
-
-        {formError && (
-          <div className="mx-4 mt-3 p-3 bg-error/10 rounded-xl">
-            <p className="text-xs text-error font-semibold">{formError}</p>
-          </div>
-        )}
-
-        <div className="p-4 pb-8">
-          <Button onClick={handlePlaceOrder} className="w-full h-14 text-base" size="lg" loading={loading}>
-            Place order · {formatPrice(finalTotal)}
-          </Button>
+          </FadeIn>
         </div>
+
+        {/* Bottom bar */}
+        <motion.div
+          initial={{ y: 100 }}
+          animate={{ y: 0 }}
+          className="fixed bottom-0 left-0 right-0 bg-white border-t border-border px-4 py-4 pb-safe-bottom shadow-sheet max-w-lg mx-auto"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-text-secondary">Total</span>
+            <span className="text-2xl font-bold text-text-primary">
+              €{total.toFixed(2)}
+            </span>
+          </div>
+
+          <Button
+            fullWidth
+            size="lg"
+            onClick={handleSubmitOrder}
+            isLoading={isSubmitting}
+            disabled={!customerName || !customerPhone || !deliveryAddress}
+          >
+            {paymentMethod === 'cash' ? 'Place Order' : 'Pay & Order'}
+          </Button>
+        </motion.div>
       </div>
     </PageTransition>
   );

@@ -1,40 +1,67 @@
-import { ShoppingBag } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from '@/contexts/CartContext';
-import { formatPrice } from '@/lib/utils';
+import { ShoppingBag, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useCartStore } from '@/stores';
+import { useHaptics } from '@/hooks/useHaptics';
 
 export function FloatingCartButton() {
-  const { itemCount, total } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
+  const haptics = useHaptics();
+  const { itemCount, total } = useCartStore();
 
-  // Hide on cart/checkout pages
-  const hiddenPaths = ['/cart', '/checkout', '/login', '/register'];
-  const shouldHide = hiddenPaths.some(p => location.pathname.startsWith(p));
+  // Hide on certain pages
+  const hiddenPaths = ['/cart', '/checkout', '/login', '/register', '/onboarding'];
+  const shouldHide = hiddenPaths.some((p) => location.pathname.startsWith(p));
+
+  const handlePress = () => {
+    haptics.impactMedium();
+    navigate('/cart');
+  };
 
   return (
     <AnimatePresence>
-      {itemCount > 0 && !shouldHide && (
+      {!shouldHide && itemCount > 0 && (
         <motion.button
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25 }}
-          onClick={() => navigate('/cart')}
-          className="fixed bottom-20 left-4 right-4 z-30 bg-primary text-white rounded-2xl py-3.5 px-5 flex items-center justify-between floating-cart max-w-lg mx-auto"
+          whileTap={{ scale: 0.95 }}
+          onClick={handlePress}
+          className={cn(
+            'fixed bottom-20 left-4 right-4 z-30',
+            'flex items-center justify-between',
+            'h-14 px-5 rounded-2xl',
+            'bg-primary text-white shadow-glow',
+            'max-w-lg mx-auto'
+          )}
         >
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <ShoppingBag className="w-4 h-4" />
-            </div>
-            <span className="font-bold text-sm">View cart</span>
-          </div>
           <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold">{itemCount} items</span>
-            <span className="bg-white/20 rounded-lg px-3 py-1 text-sm font-bold">
-              {formatPrice(total)}
-            </span>
+            <div className="relative">
+              <ShoppingBag className="w-5 h-5" />
+              <motion.span
+                key={itemCount}
+                initial={{ scale: 1.5 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-white text-primary text-[10px] font-bold rounded-full flex items-center justify-center"
+              >
+                {itemCount}
+              </motion.span>
+            </div>
+            <span className="font-semibold">View Cart</span>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <motion.span
+              key={total}
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              className="font-bold"
+            >
+              €{total.toFixed(2)}
+            </motion.span>
+            <ChevronRight className="w-5 h-5" />
           </div>
         </motion.button>
       )}

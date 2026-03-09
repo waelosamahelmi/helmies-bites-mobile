@@ -1,65 +1,93 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Home, Search, ClipboardList, User } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Home, Search, ShoppingBag, Heart, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useCart } from '@/contexts/CartContext';
+import { useCartStore, useWishlistStore } from '@/stores';
 import { useHaptics } from '@/hooks/useHaptics';
 
 const tabs = [
-  { path: '/', icon: Home, label: 'Discovery' },
-  { path: '/search', icon: Search, label: 'Search' },
-  { path: '/orders', icon: ClipboardList, label: 'Orders' },
+  { path: '/', icon: Home, label: 'Home' },
+  { path: '/cart', icon: ShoppingBag, label: 'Cart' },
+  { path: '/wishlist', icon: Heart, label: 'Wishlist' },
   { path: '/account', icon: User, label: 'Account' },
 ];
 
 export function BottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { itemCount } = useCart();
   const haptics = useHaptics();
+  const { itemCount } = useCartStore();
+  const wishlistItems = useWishlistStore((state) => state.items);
 
+  // Hide on certain paths
   const hiddenPaths = ['/checkout', '/login', '/register', '/onboarding'];
-  if (hiddenPaths.some(p => location.pathname.startsWith(p))) return null;
+  if (hiddenPaths.some((p) => location.pathname.startsWith(p))) return null;
+
+  const handleTabPress = (path: string) => {
+    haptics.selectionChanged();
+    navigate(path);
+  };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-900 border-t border-border dark:border-gray-800 shadow-bottom-nav safe-bottom">
-      <div className="flex items-center justify-around h-14 max-w-lg mx-auto">
+    <nav
+      className={cn(
+        'fixed bottom-0 left-0 right-0 z-40',
+        'bg-surface-dark rounded-t-[35px]',
+        'pb-safe-bottom max-w-lg mx-auto'
+      )}
+    >
+      <div className="flex items-center justify-around h-tabbar">
         {tabs.map(({ path, icon: Icon, label }) => {
-          const isActive = path === '/'
-            ? location.pathname === '/'
-            : location.pathname.startsWith(path);
+          const isActive =
+            path === '/'
+              ? location.pathname === '/'
+              : location.pathname.startsWith(path);
+
+          // Badge count
+          let badgeCount = 0;
+          if (path === '/cart') badgeCount = itemCount;
+          if (path === '/wishlist') badgeCount = wishlistItems.length;
 
           return (
             <motion.button
               key={path}
               whileTap={{ scale: 0.85 }}
-              onClick={() => { navigate(path); haptics.selectionChanged(); }}
-              className={cn(
-                'flex flex-col items-center justify-center w-16 h-full gap-0.5 transition-colors relative',
-                isActive ? 'text-primary' : 'text-text-tertiary dark:text-gray-500'
-              )}
+              onClick={() => handleTabPress(path)}
+              className="flex flex-col items-center justify-center w-16 h-full gap-0.5 relative"
             >
               <div className="relative">
-                <Icon className="w-5 h-5" strokeWidth={isActive ? 2.5 : 2} />
-                {label === 'Orders' && itemCount > 0 && (
+                <Icon
+                  className={cn(
+                    'w-5 h-5 transition-colors',
+                    isActive ? 'text-primary' : 'text-text-secondary'
+                  )}
+                  strokeWidth={isActive ? 2.5 : 2}
+                  fill={isActive && path === '/wishlist' ? 'currentColor' : 'none'}
+                />
+                {badgeCount > 0 && (
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1.5 -right-2.5 w-4 h-4 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center"
+                    className={cn(
+                      'absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1',
+                      'bg-error text-white text-[10px] font-bold rounded-full',
+                      'flex items-center justify-center'
+                    )}
                   >
-                    {itemCount}
+                    {badgeCount > 99 ? '99+' : badgeCount}
                   </motion.span>
                 )}
               </div>
-              <span className={cn('text-[10px]', isActive ? 'font-bold' : 'font-medium')}>
+              <span
+                className={cn(
+                  'text-[10px]',
+                  isActive
+                    ? 'font-bold text-primary'
+                    : 'font-medium text-text-secondary'
+                )}
+              >
                 {label}
               </span>
-              {isActive && (
-                <motion.div
-                  layoutId="bottomNavIndicator"
-                  className="absolute -top-px left-3 right-3 h-0.5 bg-primary rounded-full"
-                />
-              )}
             </motion.button>
           );
         })}

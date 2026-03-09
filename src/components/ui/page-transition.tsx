@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ReactNode } from 'react';
 
 interface PageTransitionProps {
@@ -6,13 +6,13 @@ interface PageTransitionProps {
   className?: string;
 }
 
-export function PageTransition({ children, className = '' }: PageTransitionProps) {
+export function PageTransition({ children, className }: PageTransitionProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       className={className}
     >
       {children}
@@ -20,12 +20,18 @@ export function PageTransition({ children, className = '' }: PageTransitionProps
   );
 }
 
-export function FadeIn({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+interface FadeInProps {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}
+
+export function FadeIn({ children, delay = 0, className }: FadeInProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay, ease: 'easeOut' }}
+      transition={{ duration: 0.3, delay }}
       className={className}
     >
       {children}
@@ -33,12 +39,31 @@ export function FadeIn({ children, delay = 0, className = '' }: { children: Reac
   );
 }
 
-export function ScaleIn({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+interface SlideInProps {
+  children: ReactNode;
+  direction?: 'up' | 'down' | 'left' | 'right';
+  delay?: number;
+  className?: string;
+}
+
+export function SlideIn({
+  children,
+  direction = 'up',
+  delay = 0,
+  className,
+}: SlideInProps) {
+  const variants = {
+    up: { initial: { y: 20, opacity: 0 }, animate: { y: 0, opacity: 1 } },
+    down: { initial: { y: -20, opacity: 0 }, animate: { y: 0, opacity: 1 } },
+    left: { initial: { x: 20, opacity: 0 }, animate: { x: 0, opacity: 1 } },
+    right: { initial: { x: -20, opacity: 0 }, animate: { x: 0, opacity: 1 } },
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3, delay, type: 'spring', damping: 20, stiffness: 300 }}
+      initial={variants[direction].initial}
+      animate={variants[direction].animate}
+      transition={{ duration: 0.3, delay }}
       className={className}
     >
       {children}
@@ -46,12 +71,24 @@ export function ScaleIn({ children, delay = 0, className = '' }: { children: Rea
   );
 }
 
-export function SlideUp({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
+interface ScaleInProps {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}
+
+export function ScaleIn({ children, delay = 0, className }: ScaleInProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay, ease: [0.25, 0.1, 0.25, 1] }}
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{
+        duration: 0.4,
+        delay,
+        type: 'spring',
+        stiffness: 260,
+        damping: 20,
+      }}
       className={className}
     >
       {children}

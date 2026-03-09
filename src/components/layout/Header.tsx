@@ -1,50 +1,165 @@
-import { MapPin, ChevronDown, Bell } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useLocation as useGeoLocation } from '@/contexts/LocationContext';
+import { ChevronLeft, Search, ShoppingBag, Bell, Menu } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useCartStore } from '@/stores';
+import { useUIStore } from '@/stores';
+import { useHaptics } from '@/hooks/useHaptics';
 
-export function Header() {
-  const { address, city } = useGeoLocation();
+interface HeaderProps {
+  title?: string;
+  showBack?: boolean;
+  showSearch?: boolean;
+  showCart?: boolean;
+  showMenu?: boolean;
+  showNotifications?: boolean;
+  transparent?: boolean;
+  className?: string;
+  centerTitle?: boolean;
+  titleClassName?: string;
+  rightContent?: React.ReactNode;
+  onBackPress?: () => void;
+}
+
+export function Header({
+  title,
+  showBack = false,
+  showSearch = false,
+  showCart = false,
+  showMenu = false,
+  showNotifications = false,
+  transparent = false,
+  className,
+  centerTitle = true,
+  titleClassName,
+  rightContent,
+  onBackPress,
+}: HeaderProps) {
   const navigate = useNavigate();
-  const displayLocation = address || city || 'Set location';
+  const location = useLocation();
+  const haptics = useHaptics();
+  const { total, itemCount } = useCartStore();
+  const { openSearch, toggleMenu } = useUIStore();
+
+  const handleBack = () => {
+    haptics.selectionChanged();
+    if (onBackPress) {
+      onBackPress();
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleCartPress = () => {
+    haptics.selectionChanged();
+    navigate('/cart');
+  };
+
+  const handleSearchPress = () => {
+    haptics.selectionChanged();
+    if (location.pathname !== '/search') {
+      navigate('/search');
+    }
+  };
 
   return (
-    <header className="sticky top-0 z-30 bg-white dark:bg-gray-900 safe-top border-b border-border/50 dark:border-gray-800">
-      <div className="flex items-center justify-between px-4 h-14">
-        {/* Location selector */}
-        <button
-          onClick={() => navigate('/address')}
-          className="flex items-center gap-1.5 min-w-0"
-        >
-          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-            <MapPin className="w-4 h-4 text-primary" />
-          </div>
-          <div className="min-w-0">
-            <div className="flex items-center gap-0.5">
-              <span className="text-sm font-bold text-text-primary dark:text-white truncate max-w-[180px]">
-                {displayLocation}
-              </span>
-              <ChevronDown className="w-4 h-4 text-text-secondary dark:text-gray-400 flex-shrink-0" />
-            </div>
-          </div>
-        </button>
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50',
+        'h-header max-w-lg mx-auto',
+        'flex items-center justify-between px-4',
+        transparent ? 'bg-transparent' : 'bg-white border-b border-border',
+        className
+      )}
+    >
+      {/* Left section */}
+      <div className="flex items-center min-w-[60px]">
+        {showMenu && (
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={toggleMenu}
+            className="p-2 -ml-2"
+          >
+            <Menu className="w-6 h-6 text-text-primary" />
+          </motion.button>
+        )}
+        {showBack && (
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={handleBack}
+            className="p-2 -ml-2"
+          >
+            <ChevronLeft className="w-6 h-6 text-text-primary" />
+          </motion.button>
+        )}
+      </div>
 
-        <div className="flex items-center gap-2">
-          {/* Notification bell */}
+      {/* Center title */}
+      {title && (
+        <div
+          className={cn(
+            centerTitle && 'absolute left-1/2 -translate-x-1/2',
+            !centerTitle && 'flex-1'
+          )}
+        >
+          <h1
+            className={cn(
+              'font-semibold text-lg text-text-primary truncate',
+              titleClassName
+            )}
+          >
+            {title}
+          </h1>
+        </div>
+      )}
+
+      {/* Right section */}
+      <div className="flex items-center gap-1 min-w-[60px] justify-end">
+        {rightContent}
+
+        {showSearch && (
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={handleSearchPress}
+            className="p-2"
+          >
+            <Search className="w-5 h-5 text-text-primary" />
+          </motion.button>
+        )}
+
+        {showNotifications && (
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate('/notifications')}
-            className="relative w-9 h-9 rounded-full bg-surface-secondary dark:bg-gray-800 flex items-center justify-center"
+            className="p-2 relative"
           >
-            <Bell className="w-4 h-4 text-text-secondary dark:text-gray-400" />
-            <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-primary" />
+            <Bell className="w-5 h-5 text-text-primary" />
+            {/* Notification dot */}
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full" />
           </motion.button>
+        )}
 
-          {/* Logo */}
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-white font-black text-sm">H</span>
-          </div>
-        </div>
+        {showCart && (
+          <motion.button
+            whileTap={{ scale: 0.9 }}
+            onClick={handleCartPress}
+            className="p-2 relative"
+          >
+            <ShoppingBag className="w-5 h-5 text-text-primary" />
+            {itemCount > 0 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-0.5 -right-0.5 min-w-[20px] h-5 px-1.5 
+                           bg-error rounded-full flex items-center justify-center"
+              >
+                <span className="text-[10px] font-bold text-white">
+                  €{total.toFixed(0)}
+                </span>
+              </motion.div>
+            )}
+          </motion.button>
+        )}
       </div>
     </header>
   );
