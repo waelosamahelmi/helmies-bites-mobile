@@ -1,41 +1,61 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MapPin, Search, Bell, Sparkles, Clock, Star, ChevronRight, Flame } from 'lucide-react';
-import { Header } from '@/components/layout/Header';
-import { CategoryTabs } from '@/components/menu/CategoryTabs';
-import { MenuItemCard } from '@/components/menu/MenuItemCard';
-import { SectionHeader } from '@/components/menu/SectionHeader';
+import { MapPin, Search, Bell, Sparkles, Clock, Star, ChevronRight, Flame, Store, TrendingUp } from 'lucide-react';
+import { RestaurantCard } from '@/components/restaurant/RestaurantCard';
 import { PageTransition, FadeIn } from '@/components/ui/page-transition';
 import { PullToRefresh } from '@/components/ui/pull-to-refresh';
 import { useRestaurants } from '@/hooks/useRestaurants';
-import { useMenu } from '@/hooks/useMenu';
 import { useLocation } from '@/contexts/LocationContext';
 import { cn } from '@/lib/utils';
 
 export default function HomePage() {
   const navigate = useNavigate();
   const { city } = useLocation();
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  const { restaurants, loading: restaurantsLoading, refetch } = useRestaurants();
-  const { menuItems, categories, loading: menuLoading } = useMenu();
+  const { restaurants, loading, refetch } = useRestaurants();
 
-  const filteredItems = useMemo(() => {
-    if (!activeCategory) return menuItems;
-    return menuItems.filter((item) => item.category_id === activeCategory);
-  }, [menuItems, activeCategory]);
+  // Filter options
+  const filters = [
+    { id: 'all', label: 'All' },
+    { id: 'nearest', label: 'Nearest' },
+    { id: 'fastest', label: 'Fastest' },
+    { id: 'rating', label: 'Top Rated' },
+  ];
 
-  const popularItems = useMemo(
-    () => menuItems.filter((item) => item.is_popular).slice(0, 8),
-    [menuItems]
-  );
+  // Apply filters
+  const filteredRestaurants = useMemo(() => {
+    let sorted = [...restaurants];
+    
+    switch (activeFilter) {
+      case 'nearest':
+        sorted.sort((a, b) => a.distance - b.distance);
+        break;
+      case 'fastest':
+        sorted.sort((a, b) => a.deliveryTime - b.deliveryTime);
+        break;
+      case 'rating':
+        sorted.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        // Default: nearest first
+        sorted.sort((a, b) => a.distance - b.distance);
+    }
+    
+    return sorted;
+  }, [restaurants, activeFilter]);
+
+  // Featured restaurants (top rated)
+  const featuredRestaurants = useMemo(() => {
+    return [...restaurants]
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 5);
+  }, [restaurants]);
 
   const handleRefresh = useCallback(async () => {
     await refetch();
   }, [refetch]);
-
-  const loading = restaurantsLoading || menuLoading;
 
   return (
     <PageTransition>
@@ -91,7 +111,7 @@ export default function HomePage() {
         {/* Content */}
         <div className="pt-32">
           <PullToRefresh onRefresh={handleRefresh}>
-            {/* Promo banner - comes first, before sticky tabs */}
+            {/* Promo banner */}
             <FadeIn delay={0.1}>
               <div className="px-4 pt-4 pb-2">
                 <motion.div
@@ -123,36 +143,45 @@ export default function HomePage() {
               </div>
             </FadeIn>
 
-            {/* Category tabs - sticky after promo */}
-            <div className="bg-background sticky top-[88px] z-40 border-b border-white/5">
-              <CategoryTabs
-                categories={categories}
-                activeCategory={activeCategory}
-                onSelect={setActiveCategory}
-              />
+            {/* Filter tabs */}
+            <div className="px-4 py-3">
+              <div className="flex gap-2 overflow-x-auto hide-scrollbar">
+                {filters.map((filter) => (
+                  <motion.button
+                    key={filter.id}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveFilter(filter.id)}
+                    className={cn(
+                      'flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold transition-all',
+                      activeFilter === filter.id
+                        ? 'bg-gradient-to-r from-primary to-amber-500 text-dark shadow-glow'
+                        : 'glass-button text-white/70'
+                    )}
+                  >
+                    {filter.label}
+                  </motion.button>
+                ))}
+              </div>
             </div>
 
-            {/* Popular items */}
-            {popularItems.length > 0 && (
+            {/* Featured restaurants */}
+            {featuredRestaurants.length > 0 && (
               <FadeIn delay={0.2}>
                 <div className="flex items-center justify-between px-4 mb-3">
                   <div className="flex items-center gap-2">
-                    <Flame className="w-5 h-5 text-primary" />
-                    <h2 className="text-lg font-bold text-white">Popular Dishes</h2>
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    <h2 className="text-lg font-bold text-white">Featured</h2>
                   </div>
-                  <button 
-                    onClick={() => navigate('/shop/popular')}
-                    className="text-sm font-semibold text-primary flex items-center gap-1"
-                  >
+                  <button className="text-sm font-semibold text-primary flex items-center gap-1">
                     See all <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
                 <div className="overflow-x-auto hide-scrollbar">
                   <div className="flex gap-3 px-4 pb-4">
-                    {popularItems.map((item) => (
-                      <MenuItemCard
-                        key={item.id}
-                        item={item}
+                    {featuredRestaurants.map((restaurant) => (
+                      <RestaurantCard
+                        key={restaurant.tenant.id}
+                        restaurant={restaurant}
                         variant="vertical"
                       />
                     ))}
@@ -161,44 +190,45 @@ export default function HomePage() {
               </FadeIn>
             )}
 
-            {/* Recommended / All items */}
+            {/* All restaurants */}
             <FadeIn delay={0.3}>
               <div className="flex items-center justify-between px-4 mb-3">
-                <div>
+                <div className="flex items-center gap-2">
+                  <Store className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-bold text-white">
-                    {activeCategory ? 'Category Items' : 'Recommended for You'}
+                    Restaurants Near You
                   </h2>
-                  <p className="text-sm text-white/50">{filteredItems.length} dishes available</p>
                 </div>
+                <span className="text-sm text-white/50">{filteredRestaurants.length} places</span>
               </div>
-              <div className="px-4 pb-8 space-y-3">
+              <div className="px-4 pb-8 space-y-4">
                 {loading ? (
                   // Skeleton loaders
-                  Array.from({ length: 4 }).map((_, i) => (
+                  Array.from({ length: 3 }).map((_, i) => (
                     <div
                       key={i}
-                      className="glass-card rounded-2xl p-4 flex gap-4 animate-pulse"
+                      className="glass-card rounded-2xl overflow-hidden animate-pulse"
                     >
-                      <div className="w-28 h-28 rounded-xl skeleton" />
-                      <div className="flex-1 space-y-3 py-1">
-                        <div className="h-4 w-3/4 skeleton rounded" />
-                        <div className="h-3 w-full skeleton rounded" />
-                        <div className="h-3 w-1/2 skeleton rounded" />
-                        <div className="h-5 w-20 skeleton rounded" />
+                      <div className="h-[140px] skeleton" />
+                      <div className="p-4 space-y-2">
+                        <div className="h-5 w-2/3 skeleton rounded" />
+                        <div className="h-4 w-1/2 skeleton rounded" />
                       </div>
                     </div>
                   ))
-                ) : filteredItems.length > 0 ? (
-                  filteredItems.map((item) => (
-                    <MenuItemCard 
-                      key={item.id} 
-                      item={item} 
+                ) : filteredRestaurants.length > 0 ? (
+                  filteredRestaurants.map((restaurant) => (
+                    <RestaurantCard
+                      key={restaurant.tenant.id}
+                      restaurant={restaurant}
                       variant="horizontal"
                     />
                   ))
                 ) : (
                   <div className="text-center py-12 glass-card rounded-2xl">
-                    <p className="text-white/50">No dishes available</p>
+                    <Store className="w-12 h-12 text-white/30 mx-auto mb-3" />
+                    <p className="text-white/50">No restaurants in your area</p>
+                    <p className="text-sm text-white/30 mt-1">Try selecting a different location</p>
                   </div>
                 )}
               </div>
