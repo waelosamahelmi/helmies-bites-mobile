@@ -55,13 +55,13 @@ export function MenuItemCard({
         whileTap={{ scale: 0.98 }}
         onClick={handleCardPress}
         className={cn(
-          'bg-white rounded-xl shadow-card overflow-hidden cursor-pointer',
+          'glass-card rounded-2xl overflow-hidden cursor-pointer card-hover',
           'w-44 flex-shrink-0',
           className
         )}
       >
         {/* Image */}
-        <div className="relative h-32 bg-surface-tertiary">
+        <div className="relative h-32 bg-dark-card">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -69,52 +69,52 @@ export function MenuItemCard({
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-card to-dark">
               <span className="text-4xl">🍽️</span>
             </div>
           )}
           {/* Wishlist button */}
           <button
             onClick={handleToggleWishlist}
-            className="absolute top-2 right-2 p-1.5 bg-white/90 rounded-full shadow-sm"
+            className="absolute top-2 right-2 p-2 glass-button rounded-full"
           >
             <Heart
               className={cn(
                 'w-4 h-4',
                 isInWishlist
-                  ? 'fill-error text-error'
-                  : 'fill-transparent text-text-secondary'
+                  ? 'fill-primary text-primary'
+                  : 'fill-transparent text-white/70'
               )}
             />
           </button>
           {/* Popular badge */}
           {item.is_popular && (
-            <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 bg-accent-orange rounded-full">
-              <Flame className="w-3 h-3 text-white" />
-              <span className="text-[10px] font-bold text-white">Popular</span>
+            <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-primary to-amber-500 rounded-full">
+              <Flame className="w-3 h-3 text-dark" />
+              <span className="text-[10px] font-bold text-dark">Popular</span>
             </div>
           )}
         </div>
 
         {/* Content */}
         <div className="p-3">
-          <h3 className="font-semibold text-sm text-text-primary line-clamp-1 mb-1">
+          <h3 className="font-bold text-sm text-white line-clamp-1 mb-1">
             {item.name}
           </h3>
-          <p className="text-xs text-text-secondary line-clamp-2 mb-2 h-8">
+          <p className="text-xs text-white/50 line-clamp-2 mb-2 h-8">
             {item.description}
           </p>
           <div className="flex items-center justify-between">
-            <span className="font-bold text-accent-coral">
+            <span className="font-extrabold gradient-text">
               €{item.price.toFixed(2)}
             </span>
             {showAddToCart && (
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={handleAddToCart}
-                className="w-7 h-7 rounded-full bg-primary flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-glow"
               >
-                <Plus className="w-4 h-4 text-white" />
+                <Plus className="w-4 h-4 text-dark" strokeWidth={3} />
               </motion.button>
             )}
           </div>
@@ -129,11 +129,11 @@ export function MenuItemCard({
         whileTap={{ scale: 0.98 }}
         onClick={handleCardPress}
         className={cn(
-          'flex items-center gap-3 p-3 bg-white rounded-xl shadow-card cursor-pointer',
+          'glass-card flex items-center gap-3 p-3 rounded-xl cursor-pointer card-hover',
           className
         )}
       >
-        <div className="w-16 h-16 rounded-lg bg-surface-tertiary flex-shrink-0 overflow-hidden">
+        <div className="w-16 h-16 rounded-lg bg-dark-card flex-shrink-0 overflow-hidden">
           {item.image_url ? (
             <img
               src={item.image_url}
@@ -141,19 +141,19 @@ export function MenuItemCard({
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-card to-dark">
               <span className="text-2xl">🍽️</span>
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm text-text-primary truncate">
+          <h3 className="font-bold text-sm text-white truncate">
             {item.name}
           </h3>
-          <p className="text-xs text-text-secondary truncate">
+          <p className="text-xs text-white/50 truncate">
             {item.description}
           </p>
-          <span className="font-bold text-sm text-accent-coral">
+          <span className="font-extrabold text-sm gradient-text">
             €{item.price.toFixed(2)}
           </span>
         </div>
@@ -161,9 +161,9 @@ export function MenuItemCard({
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={handleAddToCart}
-            className="w-8 h-8 rounded-full bg-primary-50 flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center"
           >
-            <Plus className="w-4 h-4 text-primary" />
+            <Plus className="w-5 h-5 text-primary" strokeWidth={2.5} />
           </motion.button>
         )}
       </motion.div>
@@ -176,12 +176,64 @@ export function MenuItemCard({
       whileTap={{ scale: 0.98 }}
       onClick={handleCardPress}
       className={cn(
-        'flex gap-4 p-4 bg-white rounded-xl shadow-card cursor-pointer',
+        'glass-card flex gap-4 p-4 rounded-2xl cursor-pointer card-hover',
         className
       )}
     >
+      {/* Content */}
+      <div className="flex-1 flex flex-col justify-between min-w-0">
+        <div>
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <h3 className="font-bold text-base text-white line-clamp-1">
+                {item.name}
+              </h3>
+              {item.is_popular && (
+                <Flame className="w-4 h-4 text-primary flex-shrink-0" />
+              )}
+            </div>
+            <button onClick={handleToggleWishlist} className="p-1 -mt-0.5">
+              <Heart
+                className={cn(
+                  'w-5 h-5',
+                  isInWishlist
+                    ? 'fill-primary text-primary'
+                    : 'fill-transparent text-white/40'
+                )}
+              />
+            </button>
+          </div>
+          <p className="text-sm text-white/50 line-clamp-2 mt-1">
+            {item.description}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between mt-3">
+          <span className="font-extrabold text-lg gradient-text">
+            €{item.price.toFixed(2)}
+          </span>
+          <div className="flex items-center gap-3">
+            {item.preparation_time_minutes && (
+              <div className="flex items-center gap-1 text-white/40">
+                <Clock className="w-3.5 h-3.5" />
+                <span className="text-xs">{item.preparation_time_minutes} min</span>
+              </div>
+            )}
+            {showAddToCart && (
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={handleAddToCart}
+                className="h-9 px-4 rounded-xl bg-primary text-dark text-sm font-bold shadow-glow"
+              >
+                Add
+              </motion.button>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Image */}
-      <div className="relative w-24 h-24 rounded-lg bg-surface-tertiary flex-shrink-0 overflow-hidden">
+      <div className="relative w-28 h-28 rounded-xl bg-dark-card flex-shrink-0 overflow-hidden">
         {item.image_url ? (
           <img
             src={item.image_url}
@@ -189,59 +241,15 @@ export function MenuItemCard({
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-dark-card to-dark">
             <span className="text-3xl">🍽️</span>
           </div>
         )}
-        {item.is_popular && (
-          <div className="absolute top-1 left-1">
-            <Flame className="w-4 h-4 text-accent-orange" />
+        {/* Add button overlay */}
+        <div className="absolute bottom-2 right-2">
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-glow">
+            <Plus className="w-5 h-5 text-dark" strokeWidth={3} />
           </div>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 flex flex-col justify-between min-w-0">
-        <div>
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-base text-text-primary line-clamp-1">
-              {item.name}
-            </h3>
-            <button onClick={handleToggleWishlist} className="p-1 -mt-0.5">
-              <Heart
-                className={cn(
-                  'w-5 h-5',
-                  isInWishlist
-                    ? 'fill-error text-error'
-                    : 'fill-transparent text-text-secondary'
-                )}
-              />
-            </button>
-          </div>
-          <p className="text-sm text-text-secondary line-clamp-2 mt-0.5">
-            {item.description}
-          </p>
-        </div>
-
-        <div className="flex items-center justify-between mt-2">
-          <span className="font-bold text-lg text-accent-coral">
-            €{item.price.toFixed(2)}
-          </span>
-          {item.preparation_time_minutes && (
-            <div className="flex items-center gap-1 text-text-secondary">
-              <Clock className="w-3.5 h-3.5" />
-              <span className="text-xs">{item.preparation_time_minutes} min</span>
-            </div>
-          )}
-          {showAddToCart && (
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={handleAddToCart}
-              className="h-8 px-4 rounded-md bg-primary-50 text-primary text-sm font-semibold"
-            >
-              Add to Cart
-            </motion.button>
-          )}
         </div>
       </div>
     </motion.div>

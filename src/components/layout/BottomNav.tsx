@@ -32,11 +32,12 @@ export function BottomNav() {
     <nav
       className={cn(
         'fixed bottom-0 left-0 right-0 z-40',
-        'bg-surface-dark rounded-t-[35px]',
-        'pb-safe-bottom max-w-lg mx-auto'
+        'glass-nav rounded-t-[28px]',
+        'pb-safe-bottom max-w-lg mx-auto',
+        'shadow-[0_-4px_30px_rgba(0,0,0,0.5)]'
       )}
     >
-      <div className="flex items-center justify-around h-tabbar">
+      <div className="flex items-center justify-around h-[70px]">
         {tabs.map(({ path, icon: Icon, label }) => {
           const isActive =
             path === '/'
@@ -53,13 +54,22 @@ export function BottomNav() {
               key={path}
               whileTap={{ scale: 0.85 }}
               onClick={() => handleTabPress(path)}
-              className="flex flex-col items-center justify-center w-16 h-full gap-0.5 relative"
+              className="flex flex-col items-center justify-center w-16 h-full gap-1 relative"
             >
               <div className="relative">
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTab"
+                    className="absolute -inset-3 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl"
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                )}
                 <Icon
                   className={cn(
-                    'w-5 h-5 transition-colors',
-                    isActive ? 'text-primary' : 'text-text-secondary'
+                    'w-6 h-6 transition-all duration-200 relative z-10',
+                    isActive 
+                      ? 'text-primary drop-shadow-[0_0_8px_rgba(255,122,0,0.5)]' 
+                      : 'text-white/50'
                   )}
                   strokeWidth={isActive ? 2.5 : 2}
                   fill={isActive && path === '/wishlist' ? 'currentColor' : 'none'}
@@ -69,9 +79,11 @@ export function BottomNav() {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     className={cn(
-                      'absolute -top-1.5 -right-2 min-w-[16px] h-4 px-1',
-                      'bg-error text-white text-[10px] font-bold rounded-full',
-                      'flex items-center justify-center'
+                      'absolute -top-2 -right-2.5 min-w-[18px] h-[18px] px-1',
+                      'bg-gradient-to-br from-primary to-amber-500',
+                      'text-dark text-[10px] font-extrabold rounded-full',
+                      'flex items-center justify-center',
+                      'shadow-[0_0_10px_rgba(255,122,0,0.5)]'
                     )}
                   >
                     {badgeCount > 99 ? '99+' : badgeCount}
@@ -80,10 +92,10 @@ export function BottomNav() {
               </div>
               <span
                 className={cn(
-                  'text-[10px]',
+                  'text-[11px] transition-all duration-200',
                   isActive
                     ? 'font-bold text-primary'
-                    : 'font-medium text-text-secondary'
+                    : 'font-medium text-white/50'
                 )}
               >
                 {label}

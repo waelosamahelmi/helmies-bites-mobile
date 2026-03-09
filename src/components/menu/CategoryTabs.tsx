@@ -63,11 +63,11 @@ export function CategoryTabs({
             whileTap={{ scale: 0.95 }}
             onClick={() => onSelect(category.id)}
             className={cn(
-              'flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium',
-              'border transition-all duration-200',
+              'flex-shrink-0 px-5 py-2.5 rounded-xl text-sm font-semibold',
+              'transition-all duration-200',
               isActive
-                ? 'bg-primary text-white border-primary'
-                : 'bg-white text-text-secondary border-border hover:border-primary hover:text-primary'
+                ? 'bg-gradient-to-r from-primary to-amber-500 text-dark shadow-glow'
+                : 'glass-button text-white/70 hover:text-white'
             )}
           >
             {category.name_en || category.name}
